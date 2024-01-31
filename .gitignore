@@ -1,0 +1,14 @@
+**/__pycache__/
+console
+data
+data_tokenized
+outputs
+results*
+runs*
+modifiedPretrainedModels
+wandb/
+tensorboard/
+.cache
+**/results
+**/*.log
+figures/
