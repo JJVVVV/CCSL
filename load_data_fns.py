@@ -2,7 +2,6 @@ import fcntl
 from enum import Enum, auto
 from pathlib import Path
 
-import jsonlines
 import numpy as np
 import pandas as pd
 from toolkit.enums import Split
@@ -51,16 +50,7 @@ class TextType(Enum):
     # ONLY_POS = auto()
 
 
-DATASET_CLASSNUM_MAP = {
-    DatasetName.QQP: 2,
-    DatasetName.MRPC: 2,
-    DatasetName.MNLI: 3,
-    DatasetName.QNLI: 2,
-    DatasetName.SST2: 2,
-    DatasetName.RTE: 2,
-    DatasetName.LCQMC: 2,
-    DatasetName.BQ: 2,
-}
+DATASET_CLASSNUM_MAP = {DatasetName.QQP: 2, DatasetName.MRPC: 2, DatasetName.LCQMC: 2, DatasetName.BQ: 2}
 
 
 def get_sep_token_num(model_type):
@@ -214,131 +204,9 @@ def load_data_fn_qqp_lcqmc_bq_mrpc(
     return inputs, labels
 
 
-def load_data_fn_mrpc_rte(
-    data_file_path: Path | str, model_type: str, tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast, split: Split, **kwargs
-):
-    special_tokens_map = tokenizer.special_tokens_map
-    BOS = special_tokens_map["bos_token"] if "bos_token" in special_tokens_map.keys() else None
-    EOS = special_tokens_map["eos_token"] if "eos_token" in special_tokens_map.keys() else None
-    SEP = special_tokens_map["sep_token"] if "sep_token" in special_tokens_map.keys() else None
-    MASK = special_tokens_map["mask_token"] if "mask_token" in special_tokens_map.keys() else None
-    text_type = kwargs["text_type"]
-    sep_num = get_sep_token_num(model_type)
-
-    if isinstance(data_file_path, Path | str):
-        with open(data_file_path) as f:
-            fcntl.flock(f, fcntl.LOCK_SH)
-            df = pd.read_json(data_file_path, lines=True)
-            fcntl.flock(f, fcntl.LOCK_UN)
-    else:
-        df = data_file_path
-
-    inputs = []
-    labels = []
-    for _, row in df.iterrows():
-        match text_type:
-            case TextType.ORI:
-                inputs.append(PairedText(row["sentence1"], row["sentence2"]))
-            case TextType.DATA_AUG_REP4 | TextType.DATA_AUG_REP4_FUSED | TextType.DATA_AUG_REP4_CLOSED:
-                a_sample = PairedText(
-                    [row["sentence1"], row["sentence1"], row["rephrase1"], row["rephrase1"]],
-                    [row["sentence2"], row["rephrase2"], row["sentence2"], row["rephrase2"]],
-                )
-                inputs.append(a_sample)
-        labels.append(ClassificationLabel(row["label"]))
-    return inputs, labels
-
-
-def load_data_fn_sst2(data_file_path: Path | str, model_type: str, tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast, split: Split, **kwargs):
-    text_type = kwargs["text_type"]
-
-    with jsonlines.open(data_file_path, "r") as jlReader:
-        dict_objs = list(jlReader)
-        if isinstance(dict_objs[0], str):
-            dict_objs = dict_objs[1:]
-
-    inputs = []
-    labels = []
-    for dict_obj in dict_objs:
-        if text_type == TextType.ORI:
-            inputs.append(PairedText(dict_obj["sentence"]))
-        labels.append([dict_obj["label"]])
-    return inputs, labels
-
-
-def load_data_fn_mnli(data_file_path: Path | str, model_type: str, tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast, split: Split, **kwargs):
-    special_tokens_map = tokenizer.special_tokens_map
-    BOS = special_tokens_map["bos_token"] if "bos_token" in special_tokens_map.keys() else None
-    EOS = special_tokens_map["eos_token"] if "eos_token" in special_tokens_map.keys() else None
-    SEP = special_tokens_map["sep_token"] if "sep_token" in special_tokens_map.keys() else None
-    MASK = special_tokens_map["mask_token"] if "mask_token" in special_tokens_map.keys() else None
-    text_type = kwargs["text_type"]
-    sep_num = get_sep_token_num(model_type)
-
-    with jsonlines.open(data_file_path, "r") as jlReader:
-        dict_objs = list(jlReader)
-        if isinstance(dict_objs[0], str):
-            dict_objs = dict_objs[1:]
-
-    inputs = []
-    labels = []
-    for dict_obj in dict_objs:
-        if text_type == TextType.ORI:
-            inputs.append(PairedText(dict_obj["premise"], dict_obj["hypothesis"]))
-        labels.append([dict_obj["label"]])
-    return inputs, labels
-
-
-def load_data_fn_qnli(data_file_path: Path | str, model_type: str, tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast, split: Split, **kwargs):
-    special_tokens_map = tokenizer.special_tokens_map
-    BOS = special_tokens_map["bos_token"] if "bos_token" in special_tokens_map.keys() else None
-    EOS = special_tokens_map["eos_token"] if "eos_token" in special_tokens_map.keys() else None
-    SEP = special_tokens_map["sep_token"] if "sep_token" in special_tokens_map.keys() else None
-    MASK = special_tokens_map["mask_token"] if "mask_token" in special_tokens_map.keys() else None
-    text_type = kwargs["text_type"]
-    sep_num = get_sep_token_num(model_type)
-
-    with jsonlines.open(data_file_path, "r") as jlReader:
-        dict_objs = list(jlReader)
-        if isinstance(dict_objs[0], str):
-            dict_objs = dict_objs[1:]
-
-    inputs = []
-    labels = []
-    for dict_obj in dict_objs:
-        if text_type == TextType.ORI:
-            inputs.append(PairedText(dict_obj["question"], dict_obj["sentence"]))
-        labels.append([dict_obj["label"]])
-    return inputs, labels
-
-
-def load_data_fn_lcqmc(data_file_path: Path | str, model_type: str, tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast, split: Split, **kwargs):
-    special_tokens_map = tokenizer.special_tokens_map
-    BOS = special_tokens_map["bos_token"] if "bos_token" in special_tokens_map.keys() else None
-    EOS = special_tokens_map["eos_token"] if "eos_token" in special_tokens_map.keys() else None
-    SEP = special_tokens_map["sep_token"] if "sep_token" in special_tokens_map.keys() else None
-    MASK = special_tokens_map["mask_token"] if "mask_token" in special_tokens_map.keys() else None
-    text_type = kwargs["text_type"]
-    sep_num = get_sep_token_num(model_type)
-
-    df = pd.read_json(data_file_path, lines=True)
-
-    inputs = []
-    labels = []
-    for idx, dict_obj in df.iterrows():
-        if text_type == TextType.ORI:
-            inputs.append(PairedText(dict_obj["question1"], dict_obj["question2"]))
-        labels.append([dict_obj["label"]])
-    return inputs, labels
-
-
 LOAD_DATA_FNS = {
     DatasetName.QQP: load_data_fn_qqp_lcqmc_bq_mrpc,
-    DatasetName.SST2: load_data_fn_sst2,
-    DatasetName.MNLI: load_data_fn_mnli,
-    DatasetName.QNLI: load_data_fn_qqp_lcqmc_bq_mrpc,
     DatasetName.MRPC: load_data_fn_qqp_lcqmc_bq_mrpc,
-    DatasetName.RTE: load_data_fn_qqp_lcqmc_bq_mrpc,
     DatasetName.LCQMC: load_data_fn_qqp_lcqmc_bq_mrpc,
     DatasetName.BQ: load_data_fn_qqp_lcqmc_bq_mrpc,
 }

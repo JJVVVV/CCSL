@@ -21,9 +21,8 @@ declare -A pid_cuda
 
 
 all_times=(0.8)
-seeds_of_stage1=(29 42 109 38 103 62)
-seeds_of_stage1=(54)
-seeds=(11 62 44 19 0 2 30 17)
+seeds_of_stage1=(42 109 38 62 54)
+seeds=(62 19 17 42 109 38 11 54)
 
 
 
@@ -45,9 +44,6 @@ do
       alpha=None
 
       model_type="bert-base-chinese"
-      # model_type="chinese-macbert-base"
-      # model_type="bert-large-uncased"
-      # model_type='hfl/chinese-bert-wwm-ext'
 
       model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
 

@@ -17,10 +17,6 @@ from fire import Fire
 from load_data_fns import DATASET_CLASSNUM_MAP, LOAD_DATA_FNS, DatasetName, TextType, key_map
 from model.MatchModel_binary_classification import (  # BertModelFirst,; RobertaModel_4times_4classifier_bi,; RobertaModel_6times_bi,
     BertModel_binary_classify,
-    BertModel_binary_classify_noise,
-    BertModel_binary_classify_noise_only,
-    BertModel_binary_classify_shift,
-    BertModel_binary_classify_shift_only,
     BertModel_rephrase,
     BertModel_rephrase_auxloss,
     BertModel_rephrase_auxloss_sep,
@@ -32,12 +28,6 @@ from model.MatchModel_binary_classification import (  # BertModelFirst,; Roberta
     BertMultiModel_rephrase_share_classifier_auxloss,
     BertMultiModel_rephrase_share_classifier_contrast_only,
     RobertaModel_binary_classify,
-    RobertaModel_binary_classify_noise,
-    RobertaModel_binary_classify_rotate,
-    RobertaModel_binary_classify_rotate_only,
-    RobertaModel_binary_classify_shift,
-    RobertaModel_binary_classify_shift_only,
-    RobertaModel_gaussion_label_bi,
     RobertaModel_rephrase,
     RobertaModel_rephrase_auxloss,
     RobertaModel_rephrase_close,
@@ -50,15 +40,7 @@ from model.MatchModel_binary_classification import (  # BertModelFirst,; Roberta
     RobertaMultiModel_rephrase_share_classifier,
     RobertaMultiModel_rephrase_withfused,
 )
-from model.MatchModel_multi_classification import (
-    BertModel_multi_classify,
-    BertModel_multi_classify_noise,
-    BertModel_multi_classify_shift,
-    RobertaModel_multi_classify,
-    RobertaModel_multi_classify_noise,
-    RobertaModel_multi_classify_shift,
-)
-from model.tricks import generate_spherical_vector
+from model.MatchModel_multi_classification import BertModel_multi_classify, RobertaModel_multi_classify
 from sklearn.metrics import accuracy_score, f1_score
 from toolkit import getLogger
 from toolkit.enums import Split
@@ -504,22 +486,12 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
     # * Determine the model architecture
     global DATASETNAME, TEXTTYPE
     match DATASETNAME:
-        case DatasetName.QQP | DatasetName.MRPC | DatasetName.LCQMC | DatasetName.BQ | DatasetName.QNLI:
+        case DatasetName.QQP | DatasetName.MRPC | DatasetName.LCQMC | DatasetName.BQ:
             if "roberta" in configs.model_type:
                 match TEXTTYPE:
                     case TextType.ORI:
                         if "baseline" in configs.model_name:
                             MatchModel = RobertaModel_binary_classify
-                        elif "noise" in configs.model_name:
-                            MatchModel = RobertaModel_binary_classify_noise
-                        elif "shift_only" in configs.model_name:
-                            MatchModel = RobertaModel_binary_classify_shift_only
-                        elif "shift" in configs.model_name:
-                            MatchModel = RobertaModel_binary_classify_shift
-                        elif "rotate_only" in configs.model_name:
-                            MatchModel = RobertaModel_binary_classify_rotate_only
-                        elif "rotate" in configs.model_name:
-                            MatchModel = RobertaModel_binary_classify_rotate
                     case TextType.SORTED_DATA:
                         MatchModel = RobertaModel_binary_classify
                     case TextType.JUST_DATA_AUG6:
@@ -548,14 +520,10 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
                             MatchModel = RobertaModel_rephrase_contrast_only
                         elif "IWR" in configs.model_name:
                             MatchModel = RobertaModel_rephrase_IWR
-                    case TextType.DATA_AUG_REP6:
-                        MatchModel = RobertaModel_6times_bi
                     case TextType.DATA_AUG_REP4_FUSED:
                         MatchModel = RobertaMultiModel_rephrase_fused
                     case TextType.DATA_AUG_REP4_CLOSED:
                         MatchModel = RobertaModel_rephrase_close
-                    case TextType.GAUSSIAN_LABEL:
-                        MatchModel = RobertaModel_gaussion_label_bi
                     case TextType.JUST_DATA_AUG_REP4:
                         MatchModel = RobertaModel_rephrase_just_data_aug
                     case TextType.JUST_DATA_AUG_ORI:
@@ -564,14 +532,6 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
                 if TEXTTYPE == TextType.ORI:
                     if "baseline" in configs.model_name:
                         MatchModel = BertModel_binary_classify
-                    elif "noise_only" in configs.model_name:
-                        MatchModel = BertModel_binary_classify_noise_only
-                    elif "shift_only" in configs.model_name:
-                        MatchModel = BertModel_binary_classify_shift_only
-                    elif "noise" in configs.model_name:
-                        MatchModel = BertModel_binary_classify_noise
-                    elif "shift" in configs.model_name:
-                        MatchModel = BertModel_binary_classify_shift
                 if TEXTTYPE == TextType.DATA_AUG_REP4:
                     if "single_model" in configs.model_name:
                         if "contrast_only" in configs.model_name:
@@ -600,86 +560,6 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
                     MatchModel = BertModel_rephrase_just_data_aug
                 if TEXTTYPE == TextType.JUST_DATA_AUG_ORI:
                     MatchModel = BertModel_binary_classify
-        case DatasetName.SST2:
-            if "roberta" in configs.model_type:
-                if TEXTTYPE == TextType.ORI:
-                    if "baseline" in configs.model_name:
-                        MatchModel = RobertaModel_binary_classify
-                    elif "noise" in configs.model_name:
-                        MatchModel = RobertaModel_binary_classify_noise
-                    elif "shift" in configs.model_name:
-                        MatchModel = RobertaModel_binary_classify_shift
-            elif "bert" in configs.model_type:
-                if TEXTTYPE == TextType.ORI:
-                    if "baseline" in configs.model_name:
-                        MatchModel = BertModel_binary_classify
-                    elif "noise_only" in configs.model_name:
-                        MatchModel = BertModel_binary_classify_noise_only
-                    elif "noise" in configs.model_name:
-                        MatchModel = BertModel_binary_classify_noise
-                    elif "shift" in configs.model_name:
-                        MatchModel = BertModel_binary_classify_shift
-        case DatasetName.MNLI:
-            if "roberta" in configs.model_type:
-                if TEXTTYPE == TextType.ORI:
-                    if "baseline" in configs.model_name:
-                        MatchModel = RobertaModel_multi_classify
-                    elif "noise" in configs.model_name:
-                        MatchModel = RobertaModel_multi_classify_noise
-                    elif "shift" in configs.model_name:
-                        MatchModel = RobertaModel_multi_classify_shift
-            elif "bert" in configs.model_type:
-                if TEXTTYPE == TextType.ORI:
-                    if "baseline" in configs.model_name:
-                        MatchModel = BertModel_multi_classify
-                    elif "noise" in configs.model_name:
-                        MatchModel = BertModel_multi_classify_noise
-                    elif "shift" in configs.model_name:
-                        MatchModel = BertModel_multi_classify_shift
-        # case DatasetName.QNLI:
-        #     if "roberta" in configs.model_type:
-        #         if TEXTTYPE == TextType.ORI:
-        #             if "baseline" in configs.model_name:
-        #                 MatchModel = RobertaModel_binary_classify
-        #             elif "noise" in configs.model_name:
-        #                 MatchModel = RobertaModel_binary_classify_noise
-        #             elif "shift" in configs.model_name:
-        #                 MatchModel = RobertaModel_binary_classify_shift
-        #     elif "bert" in configs.model_type:
-        #         if TEXTTYPE == TextType.ORI:
-        #             if "baseline" in configs.model_name:
-        #                 MatchModel = BertModel_binary_classify
-        #             elif "noise_only" in configs.model_name:
-        #                 MatchModel = BertModel_binary_classify_noise_only
-        #             elif "noise" in configs.model_name:
-        #                 MatchModel = BertModel_binary_classify_noise
-        #             elif "shift" in configs.model_name:
-        #                 MatchModel = BertModel_binary_classify_shift
-        case DatasetName.RTE:
-            if "roberta" in configs.model_type:
-                if TEXTTYPE == TextType.ORI:
-                    if "baseline" in configs.model_name:
-                        MatchModel = RobertaModel_binary_classify
-                    elif "noise" in configs.model_name:
-                        MatchModel = RobertaModel_binary_classify_noise
-                    elif "shift_only" in configs.model_name:
-                        MatchModel = RobertaModel_binary_classify_shift_only
-                    elif "shift" in configs.model_name:
-                        MatchModel = RobertaModel_binary_classify_shift
-                    elif "rotate_only" in configs.model_name:
-                        MatchModel = RobertaModel_binary_classify_rotate_only
-                    elif "rotate" in configs.model_name:
-                        MatchModel = RobertaModel_binary_classify_rotate
-            elif "bert" in configs.model_type:
-                if TEXTTYPE == TextType.ORI:
-                    if "baseline" in configs.model_name:
-                        MatchModel = BertModel_binary_classify
-                    elif "noise_only" in configs.model_name:
-                        MatchModel = BertModel_binary_classify_noise_only
-                    elif "noise" in configs.model_name:
-                        MatchModel = BertModel_binary_classify_noise
-                    elif "shift" in configs.model_name:
-                        MatchModel = BertModel_binary_classify_shift
     logger.info(f"local_rank {local_rank}: {str(MatchModel)}")
 
     # * Determine the model path
@@ -722,33 +602,6 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
         model = MatchModel.from_pretrained(
             pretrainedModelDir, config=my_config, local_files_only=False, num_classification=configs.num_classification
         )
-    # multi noise
-    elif MatchModel in (BertModel_multi_classify_noise, RobertaModel_multi_classify_noise):
-        model = MatchModel.from_pretrained(
-            pretrainedModelDir,
-            config=my_config,
-            local_files_only=False,
-            num_classification=configs.num_classification,
-            min_threshold=configs.min_threshold,
-        )
-    # multi shift
-    elif MatchModel in (BertModel_multi_classify_shift, RobertaModel_multi_classify_shift):
-        model = MatchModel.from_pretrained(
-            pretrainedModelDir, config=my_config, local_files_only=False, num_classification=configs.num_classification, alpha=configs.alpha
-        )
-    # binary noise
-    elif MatchModel in (BertModel_binary_classify_noise, BertModel_binary_classify_noise_only, RobertaModel_binary_classify_noise):
-        model = MatchModel.from_pretrained(pretrainedModelDir, config=my_config, local_files_only=False, min_threshold=configs.min_threshold)
-    # binary shift
-    elif MatchModel in (
-        RobertaModel_binary_classify_shift,
-        RobertaModel_binary_classify_shift_only,
-        BertModel_binary_classify_shift,
-        BertModel_binary_classify_shift_only,
-    ):
-        model = MatchModel.from_pretrained(pretrainedModelDir, config=my_config, local_files_only=False, alpha=configs.alpha)
-    # elif MatchModel in (BertMultiModel_rephrase,):
-    #     model = MatchModel.from_pretrained(pretrainedModelDir, "warmboost" not in configs.model_name)
     else:
         if "multi_model" in configs.model_name and "warmboost" in configs.model_name and "s2m" not in configs.model_name:
             model = MatchModel.from_pretrained(pretrainedModelDir, False, config=my_config, local_files_only=False)
@@ -778,7 +631,6 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
 def main() -> None:
     # * Request GPU memory
     # allocate_gpu_memory(0.8)
-    # # time.sleep(99999)
 
     # * Loading model
     model, tokenizer = load_model()

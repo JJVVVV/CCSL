@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
-# pkill -s SIGKILL -pgn 3697090
-# while kill -0 $PID 2>/dev/null; do sleep 1; done
 
 # CUDA_VISIBLE_DEVICES=0/1/2/3/
 CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
@@ -21,23 +19,16 @@ pids=()
 declare -A pid_cuda
 
 
-# # QQP
-# 25571765677776765
-seeds=(11 13 17 19 23 29 31 37 39 41 43 47 51 53 57 59 61 67 71 73 79 83 87 89 97 101 103 107 109 113 127 131 137 139 149 151 157 163 167 173)
-seeds=(0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78 39 41 43 47 51 53 57 59 61 67 71 73 79 83 87 89 97 101 103 107 109 113 127 131 137 139 149 151 157 163 167 173)
 seeds=(52 78 44 2 22 89 8 87)
-# seeds=(167 163 131)
-auxloss_warmup_steps=1
+
 model_names=("nodrop_baseline")
-model_names=("nodrop_baseline_IWR")
+model_names=("nodrop_single_model")
+# model_names=("nodrop_baseline_IWR")
+
+auxloss_warmup_steps=1
 # model_names=("nodrop_single_model_auxloss=kl_warmupepoch=$auxloss_warmup_steps")
-# model_names=("nodrop_single_model")
-# model_name="single_model_correct"
-# model_name="multi_model"
-# multi_model_fused multi_model_withfused
 # model_names=("multi_model_shareclassifier")
-# model_name="noise2_$min_threshold"
-# model_name="shift_only_$alpha"
+
 
 
 # 遍历所有的种子

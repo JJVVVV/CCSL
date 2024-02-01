@@ -1,26 +1,8 @@
 #!/bin/bash
 
 # nohup ./trainScript_roberta_MRPC.sh > /dev/null 2>&1 &
-# pkill -s SIGKILL -pgn 3697090
-
-# 定义一个数组，存放种子
-# while kill -0 $PID 2>/dev/null; do sleep 1; done
 
 
-# # QQP
-# 25571765677776765
-# seeds=(37 11 13 127 167)
-# seeds=(5 17 25 57 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20 21 22 23 24 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100)
-# seeds=(5)
-# seeds=(4 5 11 17 25 30 45 58)
-# seeds=(6 7 8 9 10 12 13 14)
-# seeds=(0 5 6 7 8 9 10 30)
-# seeds=(31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100)
-# seeds=(36 60 98 70 95 64 77 47)
-# seeds=(50 51 52 53 54 55 56 57)
-# seeds=(11 13 17 19 23 29 31 37 39 41 43 47 51 53 57 59 61 67 71 73 79 83 87 89)
-seeds=(11 13 17 19 23 29 31 37 39 41 43 47 51 53 57 59 61 67 71 73 79 83 87 89 97 101 103 107 109 113 127 131 137 139 149 151 157 163 167 173)
-seeds=(0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78)
 seeds=(59 13 43 71 56 0 2 4)
 
 # CUDA_VISIBLE_DEVICES=0/1/2/3/
@@ -39,23 +21,13 @@ min_threshold=None
 alpha=None
 
 model_type="roberta-base"
-# model_type="bert-base-uncased"
 model_dir="../pretrained/$model_type"
-# model_dir="outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/single_model/5/16/2e-05/4/optimal_checkpoint"
-# model_type="bert-large-uncased"
-# model_type='hfl/chinese-bert-wwm-ext'
+
 
 model_name="nodrop_baseline"
 model_name="nodrop_single_model"
-model_name='nodrop_baseline_IWR'
-# model_name="single_model_correct"
-# model_name="multi_model"
-# model_name="multi_model_shareclassifier"
-# model_name="single_model_hardcases_warmboost"
-# model_name="single_model_hardcases"
-# model_name="baseline_hardcases"
-# model_name="noise2_$min_threshold"
-# model_name="shift_only_$alpha"
+# model_name='nodrop_baseline_IWR'
+
 
 fp16=True
 test_in_epoch=True

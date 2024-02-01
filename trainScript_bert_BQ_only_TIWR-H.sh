@@ -20,7 +20,7 @@ declare -A pid_cuda
 
 
 
-all_times=(0.8)
+all_times=(0.1)
 seeds_of_stage1=(68 149 109 97 43)
 seeds=(38 11 16 50 68 42 109 0)
 
@@ -44,12 +44,10 @@ do
       alpha=None
 
       model_type="bert-base-chinese"
-      # model_type="chinese-macbert-base"
-      # model_type="bert-large-uncased"
-      # model_type='hfl/chinese-bert-wwm-ext'
+
 
       model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
+      model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
 
 
       model_dir="../pretrained/$model_type"
@@ -63,11 +61,10 @@ do
       epochs=1
       max_length_input=512
       learning_rate='2e-6'
-      # learning_rate='3e-5'
+      learning_rate='3e-5'
       weight_decay=0.01
       metric='accuracy'
 
-      # train_file_path="data/LCQMC/train/qwen_with_rephrase_clean_hardcases.jsonl"
       if [[ $model_name == *"nodrop"* ]]; then
         train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_nodrop.jsonl"
         val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean_nodrop.jsonl"

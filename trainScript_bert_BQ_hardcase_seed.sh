@@ -23,24 +23,9 @@ declare -A pid_cuda
 
 
 all_times=(0.1)
-
-all_times=(0 0.2 0.4 0.6 0.8 1)
 seeds_of_stage1=(68 149 109 97 43)
-seeds=(11 17 23 68 149 109 97 43)
-#  0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78 80 82 84 86 88 90 92 94 96 98)
+seeds=(38 11 16 50 68 149 109 97)
 
-
-
-# seeds_of_stage1=(149 109 97 43 137)
-# seeds=(11 19 23 149 109 97 43 137)
-#  0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30)
-# seeds=(32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78)
-#  32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78
-
-# all_times=(1 0.8 0.6 0.4 0.2 0)
-# all_times=(0 0.2 0.4 0.6 0.8 1)
-# seeds_of_stage1=(97 43 19 53 109)
-# seeds=(11 23 13 97 43 19 53 109)
 
 for times in ${all_times[@]}
 do
@@ -60,37 +45,11 @@ do
       alpha=None
 
       model_type="bert-base-chinese"
-      # model_type="chinese-macbert-base"
-      # model_type="bert-large-uncased"
-      # model_type='hfl/chinese-bert-wwm-ext'
 
-      # model_name="baseline_hardcases_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="baseline_hardcases_warmboost_mix_easycases_negtimes=${times}_add_badcases/seed_of_stage1=$seed_of_stage1"
-
-      # model_name="single_model_hardcases_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="single_model_hardcases_warmboost_mix_easycases_negtimes=${times}_add_badcases/seed_of_stage1=$seed_of_stage1"
-      # model_name="single_model_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
 
       model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
       # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
-      model_name="nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio_add_badcases=${times}/seed_of_stage1=$seed_of_stage1"
       # model_name="nodrop_single_model_hardcases_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="nodrop_single_model_auxloss=logits_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="nodrop_single_model_after_contrast_margin=1_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-
-      
-      # model_name="multi_model_shareclassifier_hardcases_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="multi_model_shareclassifier_hardcases_warmboost_mix_easycases_negtimes=${times}_add_badcases/seed_of_stage1=$seed_of_stage1"
-
-      # model_name="s2m_multi_model_shareclassifier_hardcases_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="s2m_multi_model_shareclassifier_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-
-
-
-      # model_name="multi_model_shareclassifier_hardcases_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="single_model_hardcases_warmboost_mix_easycases_totaltimes=${times}_add_badcases/seed_of_stage1=$seed_of_stage1"
-      # model_name="noise2_$min_threshold"
-      # model_name="shift_only_$alpha"
 
       model_dir="../pretrained/$model_type"
 
@@ -102,8 +61,8 @@ do
       batch_size_infer=64
       epochs=1
       max_length_input=512
-      # learning_rate='3e-5'
-      learning_rate='2e-6'
+      learning_rate='3e-5'
+      # learning_rate='2e-6'
       weight_decay=0.01
       metric='accuracy'
 

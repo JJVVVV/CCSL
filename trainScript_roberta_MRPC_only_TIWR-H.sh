@@ -23,8 +23,6 @@ all_times=(0.6)
 seeds_of_stage1=(59 13 43 71 56)
 seeds=(13 16 24 0 14 59 43 71)
 
-
-
 for times in ${all_times[@]}
 do
   # 遍历所有的种子
@@ -43,9 +41,7 @@ do
       alpha=None
 
       model_type="roberta-base"
-      # model_type="chinese-macbert-base"
-      # model_type="bert-large-uncased"
-      # model_type='hfl/chinese-bert-wwm-ext'
+
 
       model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
 
@@ -64,7 +60,6 @@ do
       weight_decay=0.1
       metric='accuracy'
 
-      # train_file_path="data/LCQMC/train/qwen_with_rephrase_clean_hardcases.jsonl"
       if [[ $model_name == *"nodrop"* ]]; then
         train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_nodrop.jsonl"
         val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean_nodrop.jsonl"

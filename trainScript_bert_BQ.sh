@@ -1,27 +1,9 @@
 #!/bin/bash
 
 # nohup ./trainScript_bert_BQ.sh > /dev/null 2>&1 &
-# pkill -s SIGKILL -pgn 3697090
-
-# 定义一个数组，存放种子
-# while kill -0 $PID 2>/dev/null; do sleep 1; done
-
-
-# # QQP
-# 25571765677776765
-# seeds=(11 13 17 19 23 29 31 37)
-seeds=(11 13 17 19 23 29 31 37 39 41 43 47 51 53 57 59 61 67 71 73 79 83 87 89 97 101 103 107 109 113 127 131 137 139 149 151 157 163 167 173)
-seeds=(149 109 97 43 137 11 13 17 19 23 29 31 37 39 41 47 51 53 57 59 61 67 71 73 79 83 87 89 101 103 107 113 127 131 139 151 157 163 167 173)
-seeds=(0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78)
-seeds=(64 66 68 70 72 74 76 78)
-seeds=(149 109 97 43 137 11 13 17 19 23 29 31 37 39 41 47 51 53 57 59 61 67 71 73 79 83 87 89 101 103 107 113 127 131 139 151 157 163 167 173 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78)
 
 seeds=(68 149 109 97 43 137 58 53)
-# seeds=(149 109 97 43)
-# seeds=(11 23 19 17 59 13 163 73)
-# seeds=(11 13 17 149 109 97 43 137)
-# seeds=(11 13 17 23 41 87 103 163)
-# seeds=(19 53 )
+seeds=(11 13 17 19 23 29 31 37 39 41 47 51 57 59 61 67 71 73 79 83 87 89 101 103 107 113 127 131 139 151 157 163)
 # CUDA_VISIBLE_DEVICES=0/1/2/3/
 CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
 
@@ -33,45 +15,30 @@ part="all"
 text_type='ORI'
 text_type='DATA_AUG_REP4'
 # text_type='JUST_DATA_AUG_REP4'
-# text_type='JUST_DATA_AUG_ORI'
+text_type='JUST_DATA_AUG_ORI'
 
 min_threshold=None
 alpha=None
 
 model_type="bert-base-chinese"
-# model_type="chinese-bert-wwm-ext"
-# model_type="chinese-roberta-wwm-ext"
+
 
 model_dir="../pretrained/$model_type"
-# model_dir="outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/single_model/5/16/2e-05/4/optimal_checkpoint"
-# model_type="bert-large-uncased"
-# model_type='hfl/chinese-bert-wwm-ext'
 
-auxloss_warmup_steps=3
 
 model_name="nodrop_baseline"
 # model_name="nodrop_single_model"
-# model_name="nodrop_single_model_auxloss=contrast_firstseveralepoch=$auxloss_warmup_steps"
 
-# model_name="nodrop_single_model_auxloss=logits_warmupepoch=$auxloss_warmup_steps"
-# model_name="nodrop_single_model_auxloss=kl_warmupepoch=${auxloss_warmup_steps}_t=1"
-
-# model_name="nodrop_single_model_auxloss=ranking_margin=1_auxepoch=$auxloss_warmup_steps"
-model_name="nodrop_single_model"
-model_name='nodrop_baseline_IWR'
-
+# model_name='nodrop_baseline_IWR'
+auxloss_warmup_steps=3
 # model_name="nodrop_single_model_auxloss=logits"
 # model_name="nodrop_single_model_auxloss=ranking"
-# model_name="single_model_correct"
-# model_name="single_model"
-# model_name="nodrop_single_model"
-# model_name="multi_model_shareclassifier"
-# model_name="multi_model"
-# model_name="single_model_hardcases_warmboost"
-# model_name="single_model_hardcases"
-# model_name="baseline_hardcases"
-# model_name="noise2_$min_threshold"
-# model_name="shift_only_$alpha"
+# model_name="nodrop_single_model_auxloss=contrast_firstseveralepoch=$auxloss_warmup_steps"
+# model_name="nodrop_single_model_auxloss=logits_warmupepoch=$auxloss_warmup_steps"
+# model_name="nodrop_single_model_auxloss=kl_warmupepoch=${auxloss_warmup_steps}_t=1"
+# model_name="nodrop_single_model_auxloss=ranking_margin=1_auxepoch=$auxloss_warmup_steps"
+
+
 
 fp16=True
 test_in_epoch=True
