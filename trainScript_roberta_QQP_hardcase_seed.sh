@@ -24,6 +24,7 @@ declare -A pid_cuda
 all_times=(5)
 seeds_of_stage1=(52 78 44 2 22)
 seeds=(0 4 6 52 78 44 2 22)
+seeds=(8 10 12 14 16 18 20 24 26 28 30 32 34 36 38 40 42 46 48 50 54 56 58 60 62 64 66 68 70 72 74 76)
 
 for times in ${all_times[@]}
 do

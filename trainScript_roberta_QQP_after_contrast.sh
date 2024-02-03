@@ -26,15 +26,8 @@ declare -A pid_cuda
 seeds=(11 13 17 19 23 29 31 37 39 41 43 47 51 53 57 59 61 67 71 73 79 83 87 89 97 101 103 107 109 113 127 131 137 139 149 151 157 163 167 173)
 seeds=(11 51 61 157 87 13 17 19 23 29 31 37 39 41 43 47 53 57 59 67 71 73 79 83 89 97 101 103 107 109 113 127 131 137 139 149 151 163 167 173)
 seeds=(0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78)
-model_names=("nodrop_baseline")
-model_names=("nodrop_single_model")
+
 model_names=('nodrop_single_model_after_contrast_margin=1')
-# model_name="single_model_correct"
-# model_name="multi_model"
-# multi_model_fused multi_model_withfused
-# model_names=("multi_model_shareclassifier")
-# model_name="noise2_$min_threshold"
-# model_name="shift_only_$alpha"
 
 
 # 遍历所有的种子

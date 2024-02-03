@@ -238,7 +238,8 @@ def create_hardcases_data_file(split="TEST"):
                 )
                 df_mix = df_mix.sample(frac=1, random_state=0)
             elif "totaltimes" in configs.model_name:
-                df_mix = pd.concat([df, df_easy.sample(round(times * hardcases_num), random_state=configs.seed, replace=False)], axis=0)
+                easy_case_num = min(round(times * hardcases_num), len(df_easy))
+                df_mix = pd.concat([df, df_easy.sample(easy_case_num, random_state=configs.seed, replace=False)], axis=0)
             df = df_mix
             print("After add easycases: ")
             print(count := df["label"].value_counts())
@@ -247,7 +248,8 @@ def create_hardcases_data_file(split="TEST"):
         if "fix_num" in configs.model_name and configs.times is not None:
             total = len(df)
             num_hard = int(total * configs.times)
-            num_easy = total - num_hard
+            num_easy = min(total - num_hard, len(df_easy))
+
             df = pd.concat(
                 [df.sample(num_hard, random_state=configs.seed, replace=False), df_easy.sample(num_easy, random_state=configs.seed, replace=False)],
                 axis=0,
@@ -289,9 +291,11 @@ def load_dataset(tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast) -> tu
     # print(train_dataset[0]['model_input']['token_type_ids'].shape)
     try:
         val_dataset = TextDataset.from_file(
-            configs.val_file_path
-            if ("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name)
-            else create_hardcases_data_file("VALIDATION"),
+            (
+                configs.val_file_path
+                if ("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name)
+                else create_hardcases_data_file("VALIDATION")
+            ),
             tokenizer,
             split=Split.VALIDATION,
             configs=configs,
@@ -306,9 +310,11 @@ def load_dataset(tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast) -> tu
         val_dataset = None
     try:
         test_dataset = TextDataset.from_file(
-            configs.test_file_path
-            if ("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name)
-            else create_hardcases_data_file("TEST"),
+            (
+                configs.test_file_path
+                if ("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name)
+                else create_hardcases_data_file("TEST")
+            ),
             tokenizer,
             split=Split.TEST,
             configs=configs,
@@ -771,7 +777,7 @@ if __name__ == "__main__":
         elif "after_contrast" in configs.model_name:
             margin = re.search(r"margin=([\d\.]*)", configs.model_name).group(1)
             configs.model_dir = (
-                Path(f"outputs/QQP/roberta-base/DATA_AUG_REP4/all/single_model_contrast_only_margin={margin}/1/16/1e-05") / "2" / "optimal_checkpoint"
+                Path(f"outputs/QQP/roberta-base/DATA_AUG_REP4/all/single_model_contrast_only_margin={margin}/1/16/3e-05") / "2" / "optimal_checkpoint"
             )
     elif configs.dataset_name == "MRPC":
         if "warmboost" in configs.model_name:

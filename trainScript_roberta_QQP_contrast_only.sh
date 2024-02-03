@@ -1,9 +1,6 @@
 #!/bin/bash
 
 # nohup ./trainScript_roberta_QQP_contrast_only.sh > /dev/null 2>&1 &
-# pkill -s SIGKILL -pgn 3697090
-# while kill -0 $PID 2>/dev/null; do sleep 1; done
-
 
 # CUDA_VISIBLE_DEVICES=0/1/2/3/
 CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
@@ -58,7 +55,7 @@ do
   batch_size_infer=16
   epochs=1
   max_length_input=512
-  learning_rate='1e-5'
+  learning_rate='3e-5'
   weight_decay=0.1
   if [[ $model_name == *"contrast_only"* ]]; then
     metric='loss'

@@ -23,6 +23,7 @@ declare -A pid_cuda
 
 
 all_times=(0.1)
+# all_times=(6 7 3 1)
 seeds_of_stage1=(68 149 109 97 43)
 seeds=(38 11 16 50 68 149 109 97)
 

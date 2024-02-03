@@ -22,7 +22,7 @@ declare -A pid_cuda
 seeds=(52 78 44 2 22 89 8 87)
 
 model_names=("nodrop_baseline")
-model_names=("nodrop_single_model")
+# model_names=("nodrop_single_model")
 # model_names=("nodrop_baseline_IWR")
 
 auxloss_warmup_steps=1
@@ -43,7 +43,7 @@ do
     text_type='ORI'
     text_type='DATA_AUG_REP4'
     # text_type='JUST_DATA_AUG_REP4'
-    # text_type='JUST_DATA_AUG_ORI'
+    text_type='JUST_DATA_AUG_ORI'
 
     # text_type='DATA_AUG_REP4_FUSED'
     # text_type='JUST_DATA_AUG6'
