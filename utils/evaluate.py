@@ -29,10 +29,10 @@ class Evaluator1(Evaluator):
                     vote_pos = all_ori_preds.sum(axis=1)
                     all_preds = np.zeros_like(vote_pos)
                     pos_mask = vote_pos > threshold
-                    neg_mast = ~pos_mask
+                    neg_mask = ~pos_mask
                     controversial_mask = np.zeros_like(pos_mask).astype(bool) if all_ori_preds.shape[1] & 1 else vote_pos == threshold
                     all_preds[pos_mask] = 1
-                    all_preds[neg_mast] = 0
+                    all_preds[neg_mask] = 0
                     # if controversial, then use original text
                     all_preds[controversial_mask] = all_ori_preds[controversial_mask][:, 0]
                     definite_mask = (vote_pos == all_ori_preds.shape[1]) | (vote_pos == 0)
@@ -127,18 +127,20 @@ class Evaluator1(Evaluator):
             metric_dict = MetricDict({"accuracy": acc * 100, "F1-score": f1 * 100, "loss": mean_loss})
 
             file_path: Path = self.config.save_dir / "evaluator" / f"step={self.config.training_runtime['cur_step']}" / (self.split.name + ".json")
-            file_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(file_path, "w") as f:
-                try:
-                    fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                    data = json.dumps(
-                        [dict(metric_dict), bad_cases, list(good_cases_idxs), controversial_cases, confused_cases, definite_cases], ensure_ascii=False
-                    )
-                    f.write(data)
-                    f.flush()
-                    fcntl.flock(f, fcntl.LOCK_UN)
-                except IOError:
-                    print("⚠️ Skip this operation because other programs are writing files ...")
+            if not file_path.exists():
+                file_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(file_path, "w") as f:
+                    try:
+                        fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                        data = json.dumps(
+                            [dict(metric_dict), bad_cases, list(good_cases_idxs), controversial_cases, confused_cases, definite_cases],
+                            ensure_ascii=False,
+                        )
+                        f.write(data)
+                        f.flush()
+                        fcntl.flock(f, fcntl.LOCK_UN)
+                    except IOError:
+                        print("⚠️ Skip this operation because other programs are writing files ...")
             return (metric_dict, bad_cases, good_cases_idxs, controversial_cases, confused_cases, definite_cases, all_logits, all_labels)
         else:
             metric_dict = MetricDict({"accuracy": acc * 100, "F1-score": f1 * 100, "loss": mean_loss})
