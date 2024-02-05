@@ -237,9 +237,12 @@ def create_hardcases_data_file(split="TEST"):
                     axis=0,
                 )
                 df_mix = df_mix.sample(frac=1, random_state=0)
-            elif "totaltimes" in configs.model_name:
+            elif "totaltimes" in configs.model_name and configs.times is not None:
                 easy_case_num = min(round(times * hardcases_num), len(df_easy))
-                df_mix = pd.concat([df, df_easy.sample(easy_case_num, random_state=configs.seed, replace=False)], axis=0)
+                if easy_case_num > 0:
+                    df_mix = pd.concat([df, df_easy.sample(easy_case_num, random_state=configs.seed, replace=False)], axis=0)
+                else:
+                    df_mix = df
             df = df_mix
             print("After add easycases: ")
             print(count := df["label"].value_counts())
@@ -249,7 +252,6 @@ def create_hardcases_data_file(split="TEST"):
             total = len(df)
             num_hard = int(total * configs.times)
             num_easy = min(total - num_hard, len(df_easy))
-
             df = pd.concat(
                 [df.sample(num_hard, random_state=configs.seed, replace=False), df_easy.sample(num_easy, random_state=configs.seed, replace=False)],
                 axis=0,
@@ -565,7 +567,7 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
                 if TEXTTYPE == TextType.JUST_DATA_AUG_REP4:
                     MatchModel = BertModel_rephrase_just_data_aug
                 if TEXTTYPE == TextType.JUST_DATA_AUG_ORI:
-                    MatchModel = BertModel_binary_classify
+                    MatchModel = BertModel_rephrase_just_data_aug
     logger.info(f"local_rank {local_rank}: {str(MatchModel)}")
 
     # * Determine the model path
@@ -607,6 +609,10 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
     if MatchModel in (BertModel_multi_classify, RobertaModel_multi_classify):
         model = MatchModel.from_pretrained(
             pretrainedModelDir, config=my_config, local_files_only=False, num_classification=configs.num_classification
+        )
+    elif MatchModel is BertModel_rephrase_just_data_aug:
+        model = MatchModel.from_pretrained(
+            pretrainedModelDir, config=my_config, local_files_only=False, is_iwr=(TEXTTYPE == TextType.JUST_DATA_AUG_REP4)
         )
     else:
         if "multi_model" in configs.model_name and "warmboost" in configs.model_name and "s2m" not in configs.model_name:

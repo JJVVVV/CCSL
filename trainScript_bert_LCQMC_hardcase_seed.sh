@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # nohup ./trainScript_bert_LCQMC_hardcase_seed.sh > /dev/null 2>&1 &
-# pkill -s SIGKILL -pgn 3697090
-# while kill -0 $PID 2>/dev/null; do sleep 1; done
 
 
 # CUDA_VISIBLE_DEVICES=0/1/2/3/
@@ -22,7 +20,7 @@ pids=()
 declare -A pid_cuda
 
 
-all_times=(0.8)
+all_times=(0.2 0.4 0.6 0.8 1)
 seeds_of_stage1=(42 109 38 62 54)
 seeds=(62 11 44 14 30 109 38 54)
 
@@ -45,40 +43,13 @@ do
       alpha=None
 
       model_type="bert-base-chinese"
-      # model_type="chinese-macbert-base"
-      # model_type="bert-large-uncased"
-      # model_type='hfl/chinese-bert-wwm-ext'
 
-      # model_name="baseline_hardcases_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="baseline_hardcases_warmboost_mix_easycases_negtimes=${times}_add_badcases/seed_of_stage1=$seed_of_stage1"
-
-      # model_name="single_model_hardcases_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="single_model_hardcases_warmboost_mix_easycases_negtimes=${times}_add_badcases/seed_of_stage1=$seed_of_stage1"
-      
       # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="nodrop_single_model_hardcases_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
       model_name="nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
 
       # auxloss_warmup_steps=0
       # model_name="nodrop_single_model_auxloss=kl_warmupepoch=${auxloss_warmup_steps}_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-
-      # model_name="nodrop_s2m_multi_model_shareclassifier_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="nodrop_single_model_hardcases_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-      
-      # model_name="nodrop_single_model_after_contrast_margin=1_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-
-      # model_name="s2m_multi_model_shareclassifier_hardcases_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="nodrop_s2m_multi_model_shareclassifier_hardcases_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="s2m_multi_model_shareclassifier_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-
-
-      # model_name="multi_model_shareclassifier_hardcases_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="multi_model_shareclassifier_hardcases_warmboost_mix_easycases_negtimes=${times}_add_badcases/seed_of_stage1=$seed_of_stage1"
-
-      # model_name="multi_model_shareclassifier_hardcases_warmboost_mix_easycases_totaltimes=${times}_add_badcases/seed_of_stage1=$seed_of_stage1"
-      # model_name="single_model_hardcases_warmboost_mix_easycases_totaltimes=${times}_add_badcases/seed_of_stage1=$seed_of_stage1"
-      # model_name="noise2_$min_threshold"
-      # model_name="shift_only_$alpha"
 
       model_dir="../pretrained/$model_type"
 
@@ -94,19 +65,12 @@ do
       weight_decay=0.01
       metric='accuracy'
 
-      # train_file_path="data/LCQMC/train/qwen_with_rephrase_clean_hardcases.jsonl"
       train_file_path=None
       val_file_path=None
       test_file_path=None
 
       warmup_ratio=0.1
       # ###################################parameters#########################################
-
-      # if [[ $model_name == *"warmboost"* ]]; then
-      #   model_dir="outputs/$dataset_name/$model_type/DATA_AUG_REP4/all/single_model/5/16/2e-05/$seed_of_stage1/optimal_checkpoint"
-      # else
-      #   model_dir="../pretrained/$model_type"
-      # fi
       # 判断有无console目录, 没有则创建
       log_file="console/$dataset_name-$text_type-$model_type-$model_name-$epochs-$batch_size-$learning_rate-$seed.ansi.log"
       log_dir=${log_file%/*}
@@ -142,7 +106,6 @@ do
       # sed -i "s/CUDA_VISIBLE_DEVICES=[0-9|,]*/CUDA_VISIBLE_DEVICES=$cuda/" ./trainScript.sh
       # ./trainScript.sh > "console//seed-$seed.log" 2>&1 &
       # ###################################训练程序#########################################
-      # HUGGINGFACE_HUB_CACHE="/data/jjwang/.cache/huggingface/hub/" TRANSFORMERS_CACHE="/data/jjwang/.cache/huggingface/hub/" \
       # TORCH_DISTRIBUTED_DEBUG=INFO \
       if [ $nproc_pre_node -gt 1 ]; then
         CUDA_VISIBLE_DEVICES=$cuda \

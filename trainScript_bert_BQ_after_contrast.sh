@@ -104,8 +104,6 @@ do
 
   warmup_ratio=0.1
   # ###################################parameters#########################################
-
-
   # 判断有无console目录, 没有则创建
   log_file="console/$dataset_name-$text_type-$model_type-$model_name-$epochs-$batch_size-$learning_rate-$seed.ansi.log"
   log_dir=${log_file%/*}
@@ -141,7 +139,6 @@ do
   # sed -i "s/CUDA_VISIBLE_DEVICES=[0-9|,]*/CUDA_VISIBLE_DEVICES=$cuda/" ./trainScript.sh
   # ./trainScript.sh > "console//seed-$seed.log" 2>&1 &
   # ###################################训练程序#########################################
-  # HUGGINGFACE_HUB_CACHE="/data/jjwang/.cache/huggingface/hub/" TRANSFORMERS_CACHE="/data/jjwang/.cache/huggingface/hub/" \
   # TORCH_DISTRIBUTED_DEBUG=INFO \
   if [ $nproc_pre_node -gt 1 ]; then
     CUDA_VISIBLE_DEVICES=$cuda \

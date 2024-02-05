@@ -21,10 +21,9 @@ pids=()
 declare -A pid_cuda
 
 
-all_times=(5)
+all_times=(0.2)
 seeds_of_stage1=(52 78 44 2 22)
 seeds=(0 4 6 52 78 44 2 22)
-seeds=(8 10 12 14 16 18 20 24 26 28 30 32 34 36 38 40 42 46 48 50 54 56 58 60 62 64 66 68 70 72 74 76)
 
 for times in ${all_times[@]}
 do
@@ -46,8 +45,8 @@ do
       model_type="roberta-base"
 
       # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
-      # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
+      model_name="nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
 
 
       model_dir="../pretrained/$model_type"
@@ -58,7 +57,7 @@ do
       accumulate_step=1
       batch_size=16
       batch_size_infer=64
-      epochs=1
+      epochs=2
       max_length_input=512
       learning_rate='2e-6'
       # learning_rate='3e-5'
@@ -72,13 +71,6 @@ do
 
       warmup_ratio=0.1
       # ###################################parameters#########################################
-
-
-      # if [[ $model_name == *"warmboost"* ]]; then
-      #   model_dir="outputs/$dataset_name/$model_type/DATA_AUG_REP4/all/single_model/5/16/2e-05/$seed_of_stage1/optimal_checkpoint"
-      # else
-      #   model_dir="../pretrained/$model_type"
-      # fi
       # 判断有无console目录, 没有则创建
       log_file="console/$dataset_name-$text_type-$model_type-$model_name-$epochs-$batch_size-$learning_rate-$seed.ansi.log"
       log_dir=${log_file%/*}
@@ -114,7 +106,6 @@ do
       # sed -i "s/CUDA_VISIBLE_DEVICES=[0-9|,]*/CUDA_VISIBLE_DEVICES=$cuda/" ./trainScript.sh
       # ./trainScript.sh > "console//seed-$seed.log" 2>&1 &
       # ###################################训练程序#########################################
-      # HUGGINGFACE_HUB_CACHE="/data/jjwang/.cache/huggingface/hub/" TRANSFORMERS_CACHE="/data/jjwang/.cache/huggingface/hub/" \
       # TORCH_DISTRIBUTED_DEBUG=INFO \
       if [ $nproc_pre_node -gt 1 ]; then
         CUDA_VISIBLE_DEVICES=$cuda \

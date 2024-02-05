@@ -22,7 +22,7 @@ pids=()
 # 定义一个字典, 记录PID运行在哪个CUDA设备上
 declare -A pid_cuda
 
-all_times=(0.6)
+all_times=(0.2 0.4 0.6 0.8 1)
 seeds_of_stage1=(59 13 43 71 56)
 seeds=(13 16 24 0 14 59 43 71)
 
@@ -47,6 +47,7 @@ do
       model_type="roberta-base"
 
       model_name="nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
 
       model_dir="../pretrained/$model_type"
 
@@ -110,7 +111,6 @@ do
       # sed -i "s/CUDA_VISIBLE_DEVICES=[0-9|,]*/CUDA_VISIBLE_DEVICES=$cuda/" ./trainScript.sh
       # ./trainScript.sh > "console//seed-$seed.log" 2>&1 &
       # ###################################训练程序#########################################
-      # HUGGINGFACE_HUB_CACHE="/data/jjwang/.cache/huggingface/hub/" TRANSFORMERS_CACHE="/data/jjwang/.cache/huggingface/hub/" \
       # TORCH_DISTRIBUTED_DEBUG=INFO \
       if [ $nproc_pre_node -gt 1 ]; then
         CUDA_VISIBLE_DEVICES=$cuda \

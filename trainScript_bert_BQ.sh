@@ -44,9 +44,9 @@ fp16=True
 test_in_epoch=True
 
 accumulate_step=1
-if [[ $text_type == "JUST_DATA_AUG_REP4" ]]; then
+if [[ $text_type == "JUST_DATA_AUG"* ]]; then
   batch_size=64
-  batch_size=16
+  # batch_size=16
 else
   batch_size=16
 fi 
@@ -131,7 +131,6 @@ do
   # sed -i "s/CUDA_VISIBLE_DEVICES=[0-9|,]*/CUDA_VISIBLE_DEVICES=$cuda/" ./trainScript.sh
   # ./trainScript.sh > "console//seed-$seed.log" 2>&1 &
   # ###################################训练程序#########################################
-  # HUGGINGFACE_HUB_CACHE="/data/jjwang/.cache/huggingface/hub/" TRANSFORMERS_CACHE="/data/jjwang/.cache/huggingface/hub/" \
   # TORCH_DISTRIBUTED_DEBUG=INFO \
   if [ $nproc_pre_node -gt 1 ]; then
     CUDA_VISIBLE_DEVICES=$cuda \

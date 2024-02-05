@@ -8,13 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from toolkit.training.loss_functions import PairInBatchNegCoSentLoss, cos_loss, kl_loss
 from torch import Tensor
-from transformers import (
-    BertConfig,
-    BertModel,
-    PreTrainedModel,
-    RobertaConfig,
-    RobertaModel,
-)
+from transformers import BertConfig, BertModel, PreTrainedModel, RobertaConfig, RobertaModel
 from transformers.configuration_utils import PretrainedConfig
 from transformers.modeling_outputs import BaseModelOutputWithPoolingAndCrossAttentions
 
@@ -1163,13 +1157,14 @@ class BertModel_rephrase_auxloss_sep(BertModel):
 
 
 class BertModel_rephrase_just_data_aug(BertModel):
-    def __init__(self, config, add_pooling_layer=True):
+    def __init__(self, config, add_pooling_layer=True, is_iwr=False):
         super().__init__(config, add_pooling_layer)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.pooler = nn.Linear(config.hidden_size, config.hidden_size)
         self.tanh = nn.Tanh()
         self.classifier = nn.Linear(config.hidden_size, 1)
         self.loss_func = nn.BCEWithLogitsLoss(reduction="sum")
+        self.is_iwr = is_iwr
 
     def forward(
         self,
@@ -1195,27 +1190,40 @@ class BertModel_rephrase_just_data_aug(BertModel):
             ret["loss"] = loss / 16
             return ret
         else:
-            batch_size, times, _ = input_ids.shape
-            # input_ids: (batch_size, 4, seqence_len)
-            loss = 0
-            logitss = []
-            for i in range(times):
-                output = super().forward(
-                    input_ids=input_ids[:, i],
-                    attention_mask=attention_mask[:, i],
-                    token_type_ids=token_type_ids[:, i],
-                    position_ids=position_ids[:, i] if position_ids else None,
-                    output_attentions=False,
-                    output_hidden_states=False,
-                )
+            if self.is_iwr:
+                batch_size, times, _ = input_ids.shape
+                # input_ids: (batch_size, 4, seqence_len)
+                loss = 0
+                logitss = []
+                for i in range(times):
+                    output = super().forward(
+                        input_ids=input_ids[:, i],
+                        attention_mask=attention_mask[:, i],
+                        token_type_ids=token_type_ids[:, i],
+                        position_ids=position_ids[:, i] if position_ids else None,
+                        output_attentions=False,
+                        output_hidden_states=False,
+                    )
+                    cls = output.last_hidden_state[:, 0]
+                    logits = self.classifier(self.tanh(self.pooler(cls)))
+                    logitss.append(logits)
+                    if labels is not None:
+                        loss += self.loss_func(logits, labels.float())
+
+                ret["logits"] = torch.cat(logitss, dim=1)
+                if labels is not None:
+                    ret["loss"] = loss / 16
+            else:
+                batch_size, _ = input_ids.shape
+                output = super().forward(input_ids, attention_mask, token_type_ids, position_ids, output_attentions=False, output_hidden_states=False)
                 cls = output.last_hidden_state[:, 0]
                 logits = self.classifier(self.tanh(self.pooler(cls)))
-                logitss.append(logits)
-                if labels is not None:
-                    loss += self.loss_func(logits, labels.float())
+                ret["logits"] = logits
 
-            ret["logits"] = torch.cat(logitss, dim=1)
-            if labels is not None:
+                if labels is None:
+                    return ret
+
+                loss = self.loss_func(logits, labels.float())
                 ret["loss"] = loss / 16
         return ret
 
