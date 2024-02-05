@@ -20,6 +20,7 @@ declare -A pid_cuda
 
 
 all_times=(0.2)
+all_times=(0.2 0.4 0.6 0.8 1)
 seeds_of_stage1=(52 78 44 2 22)
 seeds=(0 4 6 52 78 44 2 22)
 
@@ -57,7 +58,7 @@ do
       accumulate_step=1
       batch_size=16
       batch_size_infer=64
-      epochs=2
+      epochs=3
       max_length_input=512
       learning_rate='2e-6'
       # learning_rate='3e-5'

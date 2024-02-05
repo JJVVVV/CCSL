@@ -110,6 +110,8 @@ def get_contro_confused_definite_cases(split="TEST"):
                 else:
                     model = BertModel_rephrase.from_pretrained(model_path)
             config.batch_size_infer = 100
+            Evaluator1.confused_use_ot = False
+            Evaluator1.save_results = True
             evaluator = Evaluator1(
                 "classify", Split.ANY, config=config, model=model, tokenizer=tokenizer, dataset=dataset, extral_args_evaluation={"is_train": False}
             )
@@ -776,6 +778,11 @@ if __name__ == "__main__":
                 else:
                     stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
+            if "shuffle_tiwr":
+                # TODO
+                seeds_of_stage1:list = configs.seeds_of_stage1
+                seed = (seeds_of_stage1.index(configs.seed_of_stage1)+1)%len(seeds_of_stage1)
+                configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
                 baseline_model_dir = Path("outputs/QQP/roberta-base/ORI/all/nodrop_baseline/3/16/3e-05")
             else:

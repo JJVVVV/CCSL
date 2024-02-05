@@ -14,7 +14,7 @@ from tqdm.auto import tqdm
 
 class Evaluator1(Evaluator):
     confused_use_ot = False
-
+    save_results = True
     def calculate_metric_callback(self, all_labels: list, all_logits: list, mean_loss: float):
         all_labels = np.array(all_labels)
         all_logits = np.array(all_logits)
@@ -127,7 +127,7 @@ class Evaluator1(Evaluator):
             metric_dict = MetricDict({"accuracy": acc * 100, "F1-score": f1 * 100, "loss": mean_loss})
 
             file_path: Path = self.config.save_dir / "evaluator" / f"step={self.config.training_runtime['cur_step']}" / (self.split.name + ".json")
-            if not file_path.exists():
+            if self.save_results:
                 file_path.parent.mkdir(parents=True, exist_ok=True)
                 with open(file_path, "w") as f:
                     try:
