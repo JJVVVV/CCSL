@@ -699,7 +699,7 @@ if __name__ == "__main__":
                             "outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/nodrop_single_model_auxloss=kl_warmupepoch=1/3/16/3e-05"
                         )
                     else:
-                        stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/nodrop_single_model/3/16/3e-05")
+                        stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
                 else:
                     stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
@@ -709,7 +709,7 @@ if __name__ == "__main__":
                     stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
-                baseline_model_dir = Path("outputs/LCQMC/bert-base-chinese/ORI/all/nodrop_baseline/3/16/3e-05")
+                baseline_model_dir = Path("outputs/LCQMC/bert-base-chinese/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
             else:
                 baseline_model_dir = Path("outputs/LCQMC/bert-base-chinese/ORI/all/baseline/3/16/3e-05")
         elif "after_contrast" in configs.model_name:  # stage1
@@ -742,7 +742,7 @@ if __name__ == "__main__":
                             "outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin=1/3/16/3e-05"
                         )
                     else:
-                        stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/nodrop_single_model/3/16/3e-05")
+                        stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
                 else:
                     stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
@@ -752,7 +752,7 @@ if __name__ == "__main__":
                     stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
-                baseline_model_dir = Path("outputs/BQ/bert-base-chinese/ORI/all/nodrop_baseline/3/16/3e-05")
+                baseline_model_dir = Path("outputs/BQ/bert-base-chinese/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
             else:
                 baseline_model_dir = Path("outputs/BQ/bert-base-chinese/ORI/all/baseline/3/16/3e-05")
         elif "after_contrast" in configs.model_name:
@@ -769,7 +769,7 @@ if __name__ == "__main__":
                     if "after_contrast_margin=1" in configs.model_name:
                         stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin=1/3/16/3e-05")
                     else:
-                        stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/nodrop_single_model/3/16/3e-05")
+                        stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
                 else:
                     stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
@@ -778,13 +778,13 @@ if __name__ == "__main__":
                 else:
                     stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
-            if "shuffle_tiwr":
+            if "shuffle_tiwr" in configs.model_name:
                 # TODO
                 seeds_of_stage1:list = configs.seeds_of_stage1
                 seed = (seeds_of_stage1.index(configs.seed_of_stage1)+1)%len(seeds_of_stage1)
                 configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
-                baseline_model_dir = Path("outputs/QQP/roberta-base/ORI/all/nodrop_baseline/3/16/3e-05")
+                baseline_model_dir = Path("outputs/QQP/roberta-base/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
             else:
                 baseline_model_dir = Path("outputs/QQP/roberta-base/ORI/all/baseline/3/16/3e-05")
         elif "after_contrast" in configs.model_name:
@@ -796,7 +796,7 @@ if __name__ == "__main__":
         if "warmboost" in configs.model_name:
             if "single" in configs.model_name or "baseline" in configs.model_name or "s2m" in configs.model_name:
                 if "nodrop" in configs.model_name:
-                    stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/nodrop_single_model/3/16/2e-05")
+                    stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/2e-05")
                 else:
                     stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/single_model/3/16/2e-05")
             elif "multi" in configs.model_name:
@@ -806,7 +806,7 @@ if __name__ == "__main__":
                     stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/multi_model/3/16/2e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
-                baseline_model_dir = Path("outputs/MRPC/roberta-base/ORI/all/nodrop_baseline/3/16/2e-05")
+                baseline_model_dir = Path("outputs/MRPC/roberta-base/ORI/all/Baseline_nodrop_baseline/3/16/2e-05")
             else:
                 baseline_model_dir = Path("outputs/MRPC/roberta-base/ORI/all/baseline/3/16/2e-05")
     print(configs.shuffle)

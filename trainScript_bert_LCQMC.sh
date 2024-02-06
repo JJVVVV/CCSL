@@ -3,8 +3,9 @@
 # nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &
 
 
-# CUDA_VISIBLE_DEVICES=0/1/2/3/
 CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+# CUDA_VISIBLE_DEVICES=0/1/2/3/4
+# CUDA_VISIBLE_DEVICES=5/6/7
 
 # 定义一个数组，存放可用cuda
 # IFS=',' cudas=($CUDA_VISIBLE_DEVICES) IFS=' '
@@ -21,7 +22,7 @@ declare -A pid_cuda
 
 
 seeds=(0 2 4 42 109 38 62 54)
-# seeds=(40 44 46 50 52 54 56 58 60 64 66 68 70 72 74 76 78)
+seeds=(42 109 38 62 54)
 
 # 遍历所有的种子
 for seed in ${seeds[@]}
@@ -31,9 +32,9 @@ do
   dataset_name="LCQMC"
   part="all"
   text_type='ORI'
-  text_type='DATA_AUG_REP4'
+  # text_type='DATA_AUG_REP4'
   # text_type='JUST_DATA_AUG_REP4'
-  text_type='JUST_DATA_AUG_ORI'
+  # text_type='JUST_DATA_AUG_ORI'
 
   min_threshold=None
   alpha=None
@@ -44,8 +45,8 @@ do
 
 
 
-  model_name='nodrop_baseline'
-  # model_name='nodrop_single_model'
+  model_name='Baseline_nodrop_baseline'
+  # model_name='TIWR_nodrop_single_model'
   # model_name='nodrop_baseline_IWR'
   
   auxloss_warmup_steps=3
@@ -64,7 +65,7 @@ do
   accumulate_step=1
   if [[ $text_type == "JUST_DATA_AUG"* ]]; then
     batch_size=64
-    # batch_size=16
+    batch_size=16
   else
     batch_size=16
   fi 
@@ -93,10 +94,6 @@ do
     test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean.jsonl"
   fi
 
-
-  # train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_hardcases.jsonl"
-  # val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean_hardcases.jsonl"
-  # test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean_hardcases.jsonl"
 
   warmup_ratio=0.1
   # ###################################parameters#########################################

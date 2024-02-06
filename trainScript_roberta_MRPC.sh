@@ -4,16 +4,17 @@
 
 
 seeds=(59 13 43 71 56 0 2 4)
+seeds=(59 13 43 71 56)
 
-# CUDA_VISIBLE_DEVICES=0/1/2/3/
 CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+CUDA_VISIBLE_DEVICES=5/6/7
 
 # ###################################parameters#########################################
 dashboard="None"
 dataset_name="MRPC"
 part="all"
 text_type='ORI'
-text_type='DATA_AUG_REP4'
+# text_type='DATA_AUG_REP4'
 # text_type='JUST_DATA_AUG_REP4'
 # text_type='JUST_DATA_AUG_ORI'
 
@@ -24,8 +25,8 @@ model_type="roberta-base"
 model_dir="../pretrained/$model_type"
 
 
-model_name="nodrop_baseline"
-model_name="nodrop_single_model"
+model_name="Baseline_nodrop_baseline"
+# model_name="TIWR_nodrop_single_model"
 # model_name='nodrop_baseline_IWR'
 
 
@@ -59,10 +60,6 @@ else
   val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean.jsonl"
   test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean.jsonl"
 fi
-
-# train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_hardcases.jsonl"
-# val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean_hardcases.jsonl"
-# test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean_hardcases.jsonl"
 
 warmup_ratio=0.1
 # ###################################parameters#########################################
