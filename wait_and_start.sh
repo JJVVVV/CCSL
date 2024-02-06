@@ -2,19 +2,19 @@
 
 
 
-while [[ -n $(pgrep -f trainScript_bert_BQ) ]]; do
+while [[ -n $(pgrep -f trainScript_roberta_QQP_hardcase_seed) ]]; do
     echo waiting
     sleep 10
 done
 # nohup ./trainScript_bert_BQ.sh > /dev/null 2>&1 &
 # nohup ./trainScript_bert_LCQMC_hardcase_seed.sh > /dev/null 2>&1 &
-nohup ./trainScript_bert_BQ_hardcase_seed.sh > /dev/null 2>&1 &
+# nohup ./trainScript_bert_BQ_hardcase_seed.sh > /dev/null 2>&1 &
+# nohup ./trainScript_bert_BQ_only_TIWR-H.sh > /dev/null 2>&1 &
+nohup ./trainScript_roberta_QQP_hardcase_seed.sh > /dev/null 2>&1 &
 # nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
 # nohup ./trainScript_bert_LCQMC_after_contrast.sh > /dev/null 2>&1 &
 # nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &
-# nohup ./trainScript_bert_BQ_after_contrast.sh > /dev/null 2>&1 &
 # nohup ./trainScript_roberta_MRPC.sh > /dev/null 2>&1 &
-# nohup ./trainScript_bert_BQ_hardcase_seed.sh > /dev/null 2>&1 &
 # nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
 # nohup ./trainScript_roberta_QQP_after_contrast.sh > /dev/null 2>&1 &
 # nohup ./trainScript_roberta_QQP_hardcase_seed.sh > /dev/null 2>&1 &

@@ -21,6 +21,7 @@ declare -A pid_cuda
 
 
 seeds=(52 78 44 2 22 89 8 87)
+seeds=(52 78 44 2 22)
 
 model_names=("Baseline_nodrop_baseline")
 # model_names=("TIWR_nodrop_single_model")
@@ -42,9 +43,9 @@ do
     dataset_name="QQP"
     part="all"
     text_type='ORI'
-    text_type='DATA_AUG_REP4'
+    # text_type='DATA_AUG_REP4'
     # text_type='JUST_DATA_AUG_REP4'
-    text_type='JUST_DATA_AUG_ORI'
+    # text_type='JUST_DATA_AUG_ORI'
 
     # text_type='DATA_AUG_REP4_FUSED'
     # text_type='JUST_DATA_AUG6'
@@ -60,7 +61,7 @@ do
     test_in_epoch=True
 
     accumulate_step=1
-    batch_size=64
+    batch_size=16
     batch_size_infer=64
     epochs=3
     max_length_input=512
