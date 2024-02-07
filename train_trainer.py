@@ -708,6 +708,10 @@ if __name__ == "__main__":
                 else:
                     stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
+            if "mismatch" in configs.model_name:
+                seeds_of_stage1:list = list(map(int, configs.seeds_of_stage1.split()))
+                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1)+1)%len(seeds_of_stage1)]
+                configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
                 baseline_model_dir = Path("outputs/LCQMC/bert-base-chinese/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
             else:
@@ -751,6 +755,10 @@ if __name__ == "__main__":
                 else:
                     stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
+            if "mismatch" in configs.model_name:
+                seeds_of_stage1:list = list(map(int, configs.seeds_of_stage1.split()))
+                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1)+1)%len(seeds_of_stage1)]
+                configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
                 baseline_model_dir = Path("outputs/BQ/bert-base-chinese/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
             else:
@@ -807,6 +815,10 @@ if __name__ == "__main__":
                 else:
                     stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/multi_model/3/16/2e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
+            if "mismatch" in configs.model_name:
+                seeds_of_stage1:list = list(map(int, configs.seeds_of_stage1.split()))
+                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1)+1)%len(seeds_of_stage1)]
+                configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
                 baseline_model_dir = Path("outputs/MRPC/roberta-base/ORI/all/Baseline_nodrop_baseline/3/16/2e-05")
             else:

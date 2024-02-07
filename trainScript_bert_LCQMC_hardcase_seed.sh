@@ -21,6 +21,7 @@ declare -A pid_cuda
 
 
 all_times=(0.2 0.4 0.6 0.8 1)
+all_times=(0.8)
 seeds_of_stage1=(42 109 38 62 54)
 seeds=(62 11 44 14 30 109 38 54)
 
@@ -47,6 +48,9 @@ do
       # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
       model_name="TIWR-P_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
       # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
+
+      model_name="TIWR-P_mismatch_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+
 
       # auxloss_warmup_steps=0
       # model_name="nodrop_single_model_auxloss=kl_warmupepoch=${auxloss_warmup_steps}_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
@@ -145,6 +149,7 @@ do
             --show_step False \
             --cache_dataset True\
             --seed_of_stage1 $seed_of_stage1 \
+            --seeds_of_stage1 "${seeds_of_stage1[*]}" \
             --times $times \
             > $log_file 2>&1 &
       else
@@ -180,6 +185,7 @@ do
           --show_step False \
           --cache_dataset True \
           --seed_of_stage1 $seed_of_stage1 \
+          --seeds_of_stage1 "${seeds_of_stage1[*]}" \
           --times $times \
           --auxloss_warmup_steps $auxloss_warmup_steps \
           > $log_file 2>&1 &

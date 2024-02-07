@@ -60,27 +60,50 @@ class Evaluator1(Evaluator):
             wrong_cnt_contro_confused = 0
             contro_cnt = controversial_mask.sum()
             confused_cnt = confused_mask.sum()
-            print("Consistent:")
+            if hasattr(self, "logger"):
+                self.logger.info("Consistent:")
+            else:
+                print("Consistent:")
             mask = definite_mask
-            print(f"{mask.sum()}/{mask.size}  {mask.sum()/mask.size*100:.2f}%")
+            if hasattr(self, "logger"):
+                self.logger.info(f"{mask.sum()}/{mask.size}  {mask.sum()/mask.size*100:.2f}%")
+            else:
+                print(f"{mask.sum()}/{mask.size}  {mask.sum()/mask.size*100:.2f}%")
             part_acc = accuracy_score(y_true=all_labels[mask], y_pred=all_preds[mask])
             part_f1 = f1_score(y_true=all_labels[mask], y_pred=all_preds[mask])
-            print(f"acc: {part_acc * 100:.2f}%", f"f1: {part_f1 * 100:.2f}%\n", sep="\t")
-            print("Inconsistent: ")
+            if hasattr(self, "logger"):
+                self.logger.info(f"acc: {part_acc * 100:.2f}%\tf1: {part_f1 * 100:.2f}%\n")
+                self.logger.info("Inconsistent: ")
+            else:
+                print(f"acc: {part_acc * 100:.2f}%\tf1: {part_f1 * 100:.2f}%\n")
+                print("Inconsistent: ")
             mask = controversial_mask | confused_mask
-            print(f"{mask.sum()}/{mask.size}  {mask.sum()/mask.size*100:.2f}%")
+            if hasattr(self, "logger"):
+                self.logger.info(f"{mask.sum()}/{mask.size}  {mask.sum()/mask.size*100:.2f}%")
+            else:
+                print(f"{mask.sum()}/{mask.size}  {mask.sum()/mask.size*100:.2f}%")
             part_acc = accuracy_score(y_true=all_labels[mask], y_pred=all_preds[mask])
             part_f1 = f1_score(y_true=all_labels[mask], y_pred=all_preds[mask])
-            print(f"acc: {part_acc * 100:.2f}%", f"f1: {part_f1 * 100:.2f}%\n", sep="\t")
+            if hasattr(self, "logger"):
+                self.logger.info(f"acc: {part_acc * 100:.2f}%\tf1: {part_f1 * 100:.2f}%\n")
+            else:
+                print(f"acc: {part_acc * 100:.2f}%\tf1: {part_f1 * 100:.2f}%\n")
 
             for des, mask in zip(("controversial", "confused", "definite"), [controversial_mask, confused_mask, definite_mask]):
                 if mask.sum() == 0:
                     continue
-                print(des + ":")
-                print(f"{mask.sum()}/{mask.size}  {mask.sum()/mask.size*100:.2f}%")
+                if hasattr(self, "logger"):
+                    self.logger.info(des + ":")
+                    self.logger.info(f"{mask.sum()}/{mask.size}  {mask.sum()/mask.size*100:.2f}%")
+                else:
+                    print(des + ":")
+                    print(f"{mask.sum()}/{mask.size}  {mask.sum()/mask.size*100:.2f}%")
                 part_acc = accuracy_score(y_true=all_labels[mask], y_pred=all_preds[mask])
                 part_f1 = f1_score(y_true=all_labels[mask], y_pred=all_preds[mask])
-                print(f"acc: {part_acc * 100:.2f}%", f"f1: {part_f1 * 100:.2f}%\n", sep="\t")
+                if hasattr(self, "logger"):
+                    self.logger.info(f"acc: {part_acc * 100:.2f}%\tf1: {part_f1 * 100:.2f}%\n")
+                else:
+                    print(f"acc: {part_acc * 100:.2f}%\tf1: {part_f1 * 100:.2f}%\n")
                 wrong_cnt_contro_confused += mask.sum() * (1 - part_acc) if des != "definite" else 0
             if wrong_cnt_contro_confused:
                 print(wrong_cnt_contro_confused)
@@ -125,6 +148,8 @@ class Evaluator1(Evaluator):
                         }
             good_cases_idxs = set(range(len(self.dataset))) - set(bad_cases.keys())
             metric_dict = MetricDict({"accuracy": acc * 100, "F1-score": f1 * 100, "loss": mean_loss})
+            if hasattr(self, "logger"):
+                self.logger.info(f"<{self.split.name:^14}>  {metric_dict}")
 
             file_path: Path = self.config.save_dir / "evaluator" / f"step={self.config.training_runtime['cur_step']}" / (self.split.name + ".json")
             if self.save_results:

@@ -23,6 +23,7 @@ pids=()
 declare -A pid_cuda
 
 all_times=(0.2 0.4 0.6 0.8 1)
+all_times=(0.6)
 seeds_of_stage1=(59 13 43 71 56)
 seeds=(13 16 24 0 14 59 43 71)
 
@@ -49,6 +50,8 @@ do
       model_name="TIWR-P_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
       # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
 
+      model_name="TIWR-P_mismatch_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+
       model_dir="../pretrained/$model_type"
 
       fp16=True
@@ -69,13 +72,6 @@ do
 
       warmup_ratio=0.1
       # ###################################parameters#########################################
-
-
-      # if [[ $model_name == *"warmboost"* ]]; then
-      #   model_dir="outputs/$dataset_name/$model_type/DATA_AUG_REP4/all/single_model/5/16/2e-05/$seed_of_stage1/optimal_checkpoint"
-      # else
-      #   model_dir="../pretrained/$model_type"
-      # fi
       # 判断有无console目录, 没有则创建
       log_file="console/$dataset_name-$text_type-$model_type-$model_name-$epochs-$batch_size-$learning_rate-$seed.ansi.log"
       log_dir=${log_file%/*}
@@ -150,6 +146,7 @@ do
             --show_step False \
             --cache_dataset True\
             --seed_of_stage1 $seed_of_stage1 \
+            --seeds_of_stage1 "${seeds_of_stage1[*]}" \
             --times $times \
             > $log_file 2>&1 &
       else
@@ -185,6 +182,7 @@ do
           --show_step False \
           --cache_dataset True \
           --seed_of_stage1 $seed_of_stage1 \
+          --seeds_of_stage1 "${seeds_of_stage1[*]}" \
           --times $times \
           > $log_file 2>&1 &
       fi
