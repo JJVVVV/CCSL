@@ -29,5 +29,4 @@ nohup ./trainScript_roberta_QQP_hardcase_seed.sh > /dev/null 2>&1 &
 # while kill -0 $PID 2> /dev/null; do
 #     sleep 30
 # done
-# # 这里写你想要执行的命令
 # nohup ./trainScript_bert_BQ_hardcase_seed.sh > /dev/null 2>&1 &

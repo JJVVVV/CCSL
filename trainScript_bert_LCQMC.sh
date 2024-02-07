@@ -21,7 +21,6 @@ pids=()
 declare -A pid_cuda
 
 
-seeds=(0 2 4 42 109 38 62 54)
 seeds=(42 109 38 62 54)
 
 # 遍历所有的种子
@@ -33,7 +32,6 @@ do
   part="all"
   text_type='ORI'
   # text_type='DATA_AUG_REP4'
-  # text_type='JUST_DATA_AUG_REP4'
   # text_type='JUST_DATA_AUG_ORI'
 
   min_threshold=None
@@ -47,7 +45,6 @@ do
 
   model_name='Baseline_nodrop_baseline'
   # model_name='TIWR_nodrop_single_model'
-  # model_name='nodrop_baseline_IWR'
   
   auxloss_warmup_steps=3
   # model_name="nodrop_single_model_auxloss=logits_warmupepoch=$auxloss_warmup_steps"

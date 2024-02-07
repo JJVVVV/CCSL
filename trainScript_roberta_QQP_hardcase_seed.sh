@@ -21,14 +21,10 @@ pids=()
 declare -A pid_cuda
 
 
-all_times=(0.2)
 all_times=(0.2 0.4 0.6 0.8 1)
 seeds_of_stage1=(52 78 44 2 22)
 seeds=(0 4 6 52 78 44 2 22)
 
-# all_times=(0.2)
-# seeds_of_stage1=(52 78 44 2 22)
-# seeds=(0)
 
 for times in ${all_times[@]}
 do
@@ -52,7 +48,7 @@ do
       # model_name="TIWR-P_nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
       # model_name="TIWR-P_nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
       model_name="TIWR-P_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-      model_name="TIWR-P_mismatch_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      # model_name="TIWR-P_mismatch_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
 
 
       model_dir="../pretrained/$model_type"

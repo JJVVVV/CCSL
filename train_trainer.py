@@ -14,14 +14,19 @@ import torch
 
 # import wandb
 from fire import Fire
-from load_data_fns import DATASET_CLASSNUM_MAP, LOAD_DATA_FNS, DatasetName, TextType, key_map
-from model.MatchModel_binary_classification import (  # BertModelFirst,; RobertaModel_4times_4classifier_bi,; RobertaModel_6times_bi,
+from load_data_fns import (
+    DATASET_CLASSNUM_MAP,
+    LOAD_DATA_FNS,
+    DatasetName,
+    TextType,
+    key_map,
+)
+from model.MatchModel_binary_classification import (  # BertModelFirst,; RobertaModel_4times_4classifier_bi,; RobertaModel_6times_bi,; BertModel_rephrase_IWR,; RobertaModel_rephrase_IWR,
     BertModel_binary_classify,
     BertModel_rephrase,
     BertModel_rephrase_auxloss,
     BertModel_rephrase_auxloss_sep,
     BertModel_rephrase_contrast_only,
-    BertModel_rephrase_IWR,
     BertModel_rephrase_just_data_aug,
     BertMultiModel_rephrase,
     BertMultiModel_rephrase_share_classifier,
@@ -32,7 +37,6 @@ from model.MatchModel_binary_classification import (  # BertModelFirst,; Roberta
     RobertaModel_rephrase_auxloss,
     RobertaModel_rephrase_close,
     RobertaModel_rephrase_contrast_only,
-    RobertaModel_rephrase_IWR,
     RobertaModel_rephrase_just_data_aug,
     RobertaModel_rephrase_zh,
     RobertaMultiModel_rephrase,
@@ -40,7 +44,10 @@ from model.MatchModel_binary_classification import (  # BertModelFirst,; Roberta
     RobertaMultiModel_rephrase_share_classifier,
     RobertaMultiModel_rephrase_withfused,
 )
-from model.MatchModel_multi_classification import BertModel_multi_classify, RobertaModel_multi_classify
+from model.MatchModel_multi_classification import (
+    BertModel_multi_classify,
+    RobertaModel_multi_classify,
+)
 from sklearn.metrics import accuracy_score, f1_score
 from toolkit import getLogger
 from toolkit.enums import Split
@@ -51,7 +58,13 @@ from toolkit.training.initializer import allocate_gpu_memory, initialize
 from torch.distributed.elastic.multiprocessing.errors import record
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.tensorboard import SummaryWriter
-from transformers import AutoConfig, AutoTokenizer, PreTrainedModel, PreTrainedTokenizer, PreTrainedTokenizerFast
+from transformers import (
+    AutoConfig,
+    AutoTokenizer,
+    PreTrainedModel,
+    PreTrainedTokenizer,
+    PreTrainedTokenizerFast,
+)
 from utils.evaluate import Evaluator1
 
 
@@ -100,8 +113,8 @@ def get_contro_confused_definite_cases(split="TEST"):
                 else:
                     if "shareclassifier" in model_path:
                         model = BertMultiModel_rephrase_share_classifier.from_pretrained(model_path, False)
-                    elif "withfused" in model_path:
-                        model = BertMultiModel_rephrase_withfused.from_pretrained(model_path, False)
+                    # elif "withfused" in model_path:
+                    #     model = BertMultiModel_rephrase_withfused.from_pretrained(model_path, False)
                     else:
                         model = BertMultiModel_rephrase.from_pretrained(model_path, False)
             elif "single" in model_path or "baseline" in model_path:
@@ -115,12 +128,12 @@ def get_contro_confused_definite_cases(split="TEST"):
             evaluator = Evaluator1(
                 "classify", Split.ANY, config=config, model=model, tokenizer=tokenizer, dataset=dataset, extral_args_evaluation={"is_train": False}
             )
-            metric_dict, bad_cases, good_cases_idxs, controversial_cases, confused_cases, definite_cases, all_logits, all_labels = evaluator.eval()
+            (metric_dict, bad_cases, good_cases_idxs, controversial_cases, confused_cases, definite_cases, all_logits, all_labels) = evaluator.eval()
             return controversial_cases, confused_cases, definite_cases
         else:
             return None
     with open(results_dir, "r") as f:
-        metric_dict, bad_cases, good_cases_idxs, controversial_cases, confused_cases, definite_cases = json.load(f)
+        (metric_dict, bad_cases, good_cases_idxs, controversial_cases, confused_cases, definite_cases) = json.load(f)
     return controversial_cases, confused_cases, definite_cases
 
 
@@ -164,7 +177,7 @@ def create_hardcases_data_file(split="TEST"):
         if "only_badcases" in configs.model_name:
             print("Only use the badcases of all hardcases")
             df = df[df["label"] != df["pred"]]
-        else:
+        elif "no_balance" not in configs.model_name:
             print("Balance the hardcases because they are from baseline ")
             count = df["label"].value_counts()
             neg_num, pos_num = count[0], count[1]
@@ -281,7 +294,7 @@ def load_dataset(tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast) -> tu
     #     configs.test_file_path = create_hardcases_data_file("TEST")
 
     train_dataset = TextDataset.from_file(
-        configs.train_file_path if "hardcases" not in configs.model_name else create_hardcases_data_file("TRAINING"),
+        (configs.train_file_path if "hardcases" not in configs.model_name else create_hardcases_data_file("TRAINING")),
         tokenizer,
         split=Split.TRAINING,
         configs=configs,
@@ -528,8 +541,8 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
                                 MatchModel = RobertaMultiModel_rephrase
                         elif "contrast_only" in configs.model_name:
                             MatchModel = RobertaModel_rephrase_contrast_only
-                        elif "IWR" in configs.model_name:
-                            MatchModel = RobertaModel_rephrase_IWR
+                        # elif "IWR" in configs.model_name:
+                        #     MatchModel = RobertaModel_rephrase_IWR
                     case TextType.DATA_AUG_REP4_FUSED:
                         MatchModel = RobertaMultiModel_rephrase_fused
                     case TextType.DATA_AUG_REP4_CLOSED:
@@ -560,12 +573,12 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
                                 MatchModel = BertMultiModel_rephrase_share_classifier_auxloss
                             else:
                                 MatchModel = BertMultiModel_rephrase_share_classifier
-                        elif "withfused" in configs.model_name:
-                            MatchModel = BertMultiModel_rephrase_withfused
+                        # elif "withfused" in configs.model_name:
+                        #     MatchModel = BertMultiModel_rephrase_withfused
                         else:
                             MatchModel = BertMultiModel_rephrase
-                    elif "IWR" in configs.model_name:
-                        MatchModel = BertModel_rephrase_IWR
+                    # elif "IWR" in configs.model_name:
+                    #     MatchModel = BertModel_rephrase_IWR
                 if TEXTTYPE == TextType.JUST_DATA_AUG_REP4:
                     MatchModel = BertModel_rephrase_just_data_aug
                 if TEXTTYPE == TextType.JUST_DATA_AUG_ORI:
@@ -709,8 +722,8 @@ if __name__ == "__main__":
                     stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "mismatch" in configs.model_name:
-                seeds_of_stage1:list = list(map(int, configs.seeds_of_stage1.split()))
-                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1)+1)%len(seeds_of_stage1)]
+                seeds_of_stage1: list = list(map(int, configs.seeds_of_stage1.split()))
+                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1) + 1) % len(seeds_of_stage1)]
                 configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
                 baseline_model_dir = Path("outputs/LCQMC/bert-base-chinese/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
@@ -756,8 +769,8 @@ if __name__ == "__main__":
                     stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "mismatch" in configs.model_name:
-                seeds_of_stage1:list = list(map(int, configs.seeds_of_stage1.split()))
-                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1)+1)%len(seeds_of_stage1)]
+                seeds_of_stage1: list = list(map(int, configs.seeds_of_stage1.split()))
+                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1) + 1) % len(seeds_of_stage1)]
                 configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
                 baseline_model_dir = Path("outputs/BQ/bert-base-chinese/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
@@ -788,8 +801,8 @@ if __name__ == "__main__":
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "mismatch" in configs.model_name:
                 # TODO
-                seeds_of_stage1:list = list(map(int, configs.seeds_of_stage1.split()))
-                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1)+1)%len(seeds_of_stage1)]
+                seeds_of_stage1: list = list(map(int, configs.seeds_of_stage1.split()))
+                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1) + 1) % len(seeds_of_stage1)]
                 # print(f"########{configs.seed_of_stage1}, {seed}#########")
                 # exit(1)
                 configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
@@ -816,8 +829,8 @@ if __name__ == "__main__":
                     stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/multi_model/3/16/2e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "mismatch" in configs.model_name:
-                seeds_of_stage1:list = list(map(int, configs.seeds_of_stage1.split()))
-                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1)+1)%len(seeds_of_stage1)]
+                seeds_of_stage1: list = list(map(int, configs.seeds_of_stage1.split()))
+                seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1) + 1) % len(seeds_of_stage1)]
                 configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
                 baseline_model_dir = Path("outputs/MRPC/roberta-base/ORI/all/Baseline_nodrop_baseline/3/16/2e-05")

@@ -2,13 +2,11 @@
 
 # nohup ./trainScript_bert_BQ.sh > /dev/null 2>&1 &
 
-seeds=(68 149 109 97 43 137 58 53)
 seeds=(68 149 109 97 43)
-# seeds=(11 13 17 19 23 29 31 37 39 41 47 51 57 59 61 67 71 73 79 83 87 89 101 103 107 113 127 131 139 151 157 163)
 
 CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
-CUDA_VISIBLE_DEVICES=5/6/7
+# CUDA_VISIBLE_DEVICES=5/6/7
 
 # ###################################parameters#########################################
 dashboard="None"
@@ -17,7 +15,6 @@ part="all"
 
 text_type='ORI'
 # text_type='DATA_AUG_REP4'
-# text_type='JUST_DATA_AUG_REP4'
 # text_type='JUST_DATA_AUG_ORI'
 
 min_threshold=None
@@ -32,7 +29,6 @@ model_dir="../pretrained/$model_type"
 model_name='Baseline_nodrop_baseline'
 # model_name='TIWR_nodrop_single_model'
 
-# model_name='nodrop_baseline_IWR'
 auxloss_warmup_steps=3
 # model_name="nodrop_single_model_auxloss=logits"
 # model_name="nodrop_single_model_auxloss=ranking"

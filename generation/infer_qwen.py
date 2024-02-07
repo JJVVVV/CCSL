@@ -310,11 +310,10 @@ if __name__ == "__main__":
     model_name = "qwen-14b-chat"
     model_dir = Path(f"../../pretrained/{model_name}/")
 
-    # dataset = "LCQMC"
-    dataset = "MRPC"
-    dataset = "RTE"
-    dataset = "QNLI"
-    dataset = "QQP"
+    dataset = "LCQMC"
+    # dataset = "MRPC"
+    # dataset = "QQP"
+    # dataset = "BQ"
 
     split = "train"
     split = "val"

@@ -20,12 +20,10 @@ pids=()
 declare -A pid_cuda
 
 
-seeds=(52 78 44 2 22 89 8 87)
 seeds=(52 78 44 2 22)
 
 model_names=("Baseline_nodrop_baseline")
 # model_names=("TIWR_nodrop_single_model")
-# model_names=("nodrop_baseline_IWR")
 
 auxloss_warmup_steps=1
 # model_names=("nodrop_single_model_auxloss=kl_warmupepoch=$auxloss_warmup_steps")
