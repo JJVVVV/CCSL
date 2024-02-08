@@ -103,44 +103,7 @@ prompt_map = {
             + "assistant\n"
         )
     },
-    "RTE": {
-        "rephrase": (
-            im_start
-            + "system\n"
-            + "Do NOT translate anything! Do NOT ask anything!"
-            + im_end
-            + nl
-            + im_start
-            + 'user\nRephrase the following sentence: "{}" Don\'t ask questions, just write the rephrased sentence.'
-            + im_end
-            + nl
-            + im_start
-            + "assistant\n"
-        )
-    },
-    "QNLI": {
-        "rephrase": (
-            im_start
-            + "system\n"
-            + "Do NOT translate anything! Do NOT ask anything!"
-            + im_end
-            + nl
-            + im_start
-            + 'user\nRephrase the following sentence: "{}" Don\'t ask questions, just write the rephrased sentence.'
-            + im_end
-            + nl
-            + im_start
-            + "assistant\n"
-        )
-    },
 }
-
-# key_map = {
-#     "LCQMC": ("question1", "question2"),
-#     "BQ": ("question1", "question2"),
-#     "QQP": ("question1", "question2"),
-#     "MRPC": ("sentence1", "sentence2"),
-# }
 
 
 def load_model(model_dir):
@@ -320,7 +283,7 @@ if __name__ == "__main__":
     prompt_type = "rephrase"
     batch_size = 10
     if prompt_type == "rephrase":
-        assert ~(batch_size & 1)
+        assert ~(batch_size & 1), "batch size must be even number!"
 
     PROMPT_TEMPLATE = prompt_map[dataset][prompt_type]
     print(PROMPT_TEMPLATE)

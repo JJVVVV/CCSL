@@ -43,7 +43,7 @@ do
     text_type='ORI'
     # text_type='DATA_AUG_REP4'
     # text_type='JUST_DATA_AUG_REP4'
-    # text_type='JUST_DATA_AUG_ORI'
+    text_type='JUST_DATA_AUG_ORI'
 
     # text_type='DATA_AUG_REP4_FUSED'
     # text_type='JUST_DATA_AUG6'
