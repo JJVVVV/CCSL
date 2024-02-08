@@ -43,7 +43,7 @@ do
     text_type='ORI'
     # text_type='DATA_AUG_REP4'
     # text_type='JUST_DATA_AUG_REP4'
-    text_type='JUST_DATA_AUG_ORI'
+    # text_type='JUST_DATA_AUG_ORI'
 
     # text_type='DATA_AUG_REP4_FUSED'
     # text_type='JUST_DATA_AUG6'
@@ -159,7 +159,8 @@ do
           --save_last_ckpt False \
           --show_lr False \
           --show_step False \
-          --cache_dataset True\
+          --cache_dataset True \
+          --record_cheat False \
           > $log_file 2>&1 &
     else
       CUDA_VISIBLE_DEVICES=$cuda \
@@ -194,6 +195,7 @@ do
         --show_step False \
         --cache_dataset True \
         --auxloss_warmup_steps $auxloss_warmup_steps \
+        --record_cheat False \
         > $log_file 2>&1 &
     fi
       # --fp16 \

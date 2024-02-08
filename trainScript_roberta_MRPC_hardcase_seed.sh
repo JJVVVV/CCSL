@@ -143,10 +143,11 @@ do
             --save_last_ckpt False \
             --show_lr False \
             --show_step False \
-            --cache_dataset True\
+            --cache_dataset True \
             --seed_of_stage1 $seed_of_stage1 \
             --seeds_of_stage1 "${seeds_of_stage1[*]}" \
             --times $times \
+            --record_cheat False \
             > $log_file 2>&1 &
       else
         CUDA_VISIBLE_DEVICES=$cuda \
@@ -183,6 +184,7 @@ do
           --seed_of_stage1 $seed_of_stage1 \
           --seeds_of_stage1 "${seeds_of_stage1[*]}" \
           --times $times \
+          --record_cheat False \
           > $log_file 2>&1 &
       fi
         # --fp16 \

@@ -73,21 +73,22 @@ prompt_map = {
             + "assistant\n"
         )
     },
-    "QQP": {
-        "rephrase": (
-            im_start
-            + "system\n"
-            + "Do NOT translate anything! Do NOT ask anything!"
-            + im_end
-            + nl
-            + im_start
-            + "user\n改写下面的英文句子或短文本：“{}” 要求改写后意思不变。不要反问问题，直接输出改写后的句子。"
-            + im_end
-            + nl
-            + im_start
-            + "assistant\n"
-        )
-    },
+    # "QQP": {
+    #     "rephrase": (
+    #         im_start
+    #         + "system\n"
+    #         + "Do NOT translate anything! Do NOT ask anything!"
+    #         + im_end
+    #         + nl
+    #         + im_start
+    #         # + "user\n改写下面的英文句子或短文本：“{}” 要求改写后意思不变。不要反问问题，直接输出改写后的句子。"
+    #         + 'user\nRephrase the following sentence: "{}" Don\'t ask questions, just write the rephrased sentence.'
+    #         + im_end
+    #         + nl
+    #         + im_start
+    #         + "assistant\n"
+    #     )
+    # },
     "MRPC": {
         "rephrase": (
             im_start
@@ -275,7 +276,7 @@ if __name__ == "__main__":
 
     dataset = "LCQMC"
     # dataset = "MRPC"
-    # dataset = "QQP"
+    dataset = "QQP"
     # dataset = "BQ"
 
     split = "train"
@@ -290,7 +291,7 @@ if __name__ == "__main__":
     data_file_path = Path(f"../data/{dataset}/{split}/all.jsonl")
     df = pd.read_json(data_file_path, lines=True)
     n = len(df)
-    # n = 80
+    n = 80
 
     n_proc = 8
     ends = split_data(n, n_proc)
