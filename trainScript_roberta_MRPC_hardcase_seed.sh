@@ -35,6 +35,8 @@ do
     for seed_of_stage1 in ${seeds_of_stage1[@]}
     do
       # ###################################parameters#########################################
+      model_structure="encoder"
+      task_type="classify"
       dashboard="None"
       dataset_name="MRPC"
       part="all"
@@ -148,6 +150,8 @@ do
             --seeds_of_stage1 "${seeds_of_stage1[*]}" \
             --times $times \
             --record_cheat False \
+            --model_structure $model_structure \
+            --task_type $task_type \
             > $log_file 2>&1 &
       else
         CUDA_VISIBLE_DEVICES=$cuda \
@@ -185,6 +189,8 @@ do
           --seeds_of_stage1 "${seeds_of_stage1[*]}" \
           --times $times \
           --record_cheat False \
+          --model_structure $model_structure \
+          --task_type $task_type \
           > $log_file 2>&1 &
       fi
         # --fp16 \

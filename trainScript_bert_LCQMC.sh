@@ -3,7 +3,7 @@
 # nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &
 
 
-CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+CUDA_VISIBLE_DEVICES=1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
 # CUDA_VISIBLE_DEVICES=5/6/7
 
@@ -27,19 +27,21 @@ seeds=(42 109 38 62 54)
 for seed in ${seeds[@]}
 do
   # ###################################parameters#########################################
+  model_structure="encoder"
+  task_type="classify"
   dashboard="None"
   dataset_name="LCQMC"
   part="all"
   text_type='ORI'
   # text_type='DATA_AUG_REP4'
-  text_type='JUST_DATA_AUG_ORI'
+  # text_type='JUST_DATA_AUG_ORI'
 
   min_threshold=None
   alpha=None
 
   model_type="bert-base-chinese"
 
-  model_dir="../pretrained/$model_type"
+  model_dir="../../pretrained/$model_type"
 
 
 
@@ -170,6 +172,8 @@ do
         --show_step False \
         --cache_dataset True \
         --record_cheat False \
+        --model_structure $model_structure \
+        --task_type $task_type \
         > $log_file 2>&1 &
   else
     CUDA_VISIBLE_DEVICES=$cuda \
@@ -205,6 +209,8 @@ do
       --cache_dataset True \
       --auxloss_warmup_steps $auxloss_warmup_steps \
       --record_cheat False \
+      --model_structure $model_structure \
+      --task_type $task_type \
       > $log_file 2>&1 &
   fi
     # --fp16 \

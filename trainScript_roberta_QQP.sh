@@ -37,6 +37,8 @@ do
   for model_name in ${model_names[@]}
   do
     # ###################################parameters#########################################
+    model_structure="encoder"
+    task_type="classify"
     dashboard="None"
     dataset_name="QQP"
     part="all"
@@ -161,6 +163,8 @@ do
           --show_step False \
           --cache_dataset True \
           --record_cheat False \
+          --model_structure $model_structure \
+          --task_type $task_type \
           > $log_file 2>&1 &
     else
       CUDA_VISIBLE_DEVICES=$cuda \
@@ -196,6 +200,8 @@ do
         --cache_dataset True \
         --auxloss_warmup_steps $auxloss_warmup_steps \
         --record_cheat False \
+        --model_structure $model_structure \
+        --task_type $task_type \
         > $log_file 2>&1 &
     fi
       # --fp16 \
