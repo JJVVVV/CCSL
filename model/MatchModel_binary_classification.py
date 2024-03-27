@@ -1163,7 +1163,9 @@ class BertModel_rephrase_just_data_aug(BertModel):
         self.pooler = nn.Linear(config.hidden_size, config.hidden_size)
         self.tanh = nn.Tanh()
         self.classifier = nn.Linear(config.hidden_size, 1)
-        self.loss_func = nn.BCEWithLogitsLoss(reduction="sum")
+        # self.loss_func = nn.BCEWithLogitsLoss(reduction="sum")
+        self.loss_func = nn.BCEWithLogitsLoss(reduction="mean")
+
         self.is_iwr = is_iwr
 
     def forward(
@@ -1187,7 +1189,8 @@ class BertModel_rephrase_just_data_aug(BertModel):
                 return ret
 
             loss = self.loss_func(logits, labels.float())
-            ret["loss"] = loss / 16
+            # ret["loss"] = loss / 16
+            ret["loss"] = loss
             return ret
         else:
             if self.is_iwr:
@@ -1212,7 +1215,8 @@ class BertModel_rephrase_just_data_aug(BertModel):
 
                 ret["logits"] = torch.cat(logitss, dim=1)
                 if labels is not None:
-                    ret["loss"] = loss / 16
+                    # ret["loss"] = loss / 16
+                    ret["loss"] = loss
             else:
                 batch_size, _ = input_ids.shape
                 output = super().forward(input_ids, attention_mask, token_type_ids, position_ids, output_attentions=False, output_hidden_states=False)
@@ -1224,7 +1228,8 @@ class BertModel_rephrase_just_data_aug(BertModel):
                     return ret
 
                 loss = self.loss_func(logits, labels.float())
-                ret["loss"] = loss / 16
+                # ret["loss"] = loss / 16
+                ret["loss"] = loss
         return ret
 
 
