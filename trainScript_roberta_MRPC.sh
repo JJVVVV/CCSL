@@ -5,7 +5,7 @@
 
 seeds=(59 13 43 71 56)
 
-CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+CUDA_VISIBLE_DEVICES=0/1/
 # CUDA_VISIBLE_DEVICES=5/6/7
 
 # ###################################parameters#########################################
@@ -22,7 +22,7 @@ min_threshold=None
 alpha=None
 
 model_type="roberta-base"
-model_dir="../pretrained/$model_type"
+model_dir="../../pretrained/$model_type"
 
 
 model_name="Baseline_nodrop_baseline"

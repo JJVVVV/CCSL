@@ -2,7 +2,7 @@
 
 # nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
 
-CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+CUDA_VISIBLE_DEVICES=0
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
 # CUDA_VISIBLE_DEVICES=5/6/7
 
@@ -21,6 +21,8 @@ declare -A pid_cuda
 
 
 seeds=(52 78 44 2 22)
+seeds=(78)
+
 
 model_names=("Baseline_nodrop_baseline")
 # model_names=("TIWR_nodrop_single_model")
@@ -56,7 +58,7 @@ do
     # model_type="bert-base-uncased"
     model_type="roberta-base"
 
-    model_dir="../pretrained/$model_type"
+    model_dir="../../pretrained/$model_type"
     fp16=True
     test_in_epoch=True
 
