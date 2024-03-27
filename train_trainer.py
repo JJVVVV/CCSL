@@ -14,13 +14,19 @@ import torch
 
 # import wandb
 from fire import Fire
-from load_data_fns import (
-    DATASET_CLASSNUM_MAP,
-    LOAD_DATA_FNS,
-    DatasetName,
-    TextType,
-    key_map,
-)
+from sklearn.metrics import accuracy_score, f1_score
+from toolkit import getLogger
+from toolkit.enums import Split
+from toolkit.metric import MetricDict
+from toolkit.nlp import NLPTrainingConfig, TextDataset
+from toolkit.training import CheckpointManager, Evaluator, Trainer, WatchDog
+from toolkit.training.initializer import allocate_gpu_memory, initialize
+from torch.distributed.elastic.multiprocessing.errors import record
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.utils.tensorboard import SummaryWriter
+from transformers import AutoConfig, AutoTokenizer, PreTrainedModel, PreTrainedTokenizer, PreTrainedTokenizerFast
+
+from load_data_fns import DATASET_CLASSNUM_MAP, LOAD_DATA_FNS, DatasetName, TextType, key_map
 from model.MatchModel_binary_classification import (  # BertModelFirst,; RobertaModel_4times_4classifier_bi,; RobertaModel_6times_bi,; BertModel_rephrase_IWR,; RobertaModel_rephrase_IWR,
     BertModel_binary_classify,
     BertModel_rephrase,
@@ -44,27 +50,7 @@ from model.MatchModel_binary_classification import (  # BertModelFirst,; Roberta
     RobertaMultiModel_rephrase_share_classifier,
     RobertaMultiModel_rephrase_withfused,
 )
-from model.MatchModel_multi_classification import (
-    BertModel_multi_classify,
-    RobertaModel_multi_classify,
-)
-from sklearn.metrics import accuracy_score, f1_score
-from toolkit import getLogger
-from toolkit.enums import Split
-from toolkit.metric import MetricDict
-from toolkit.nlp import NLPTrainingConfig, TextDataset
-from toolkit.training import CheckpointManager, Evaluator, Trainer, WatchDog
-from toolkit.training.initializer import allocate_gpu_memory, initialize
-from torch.distributed.elastic.multiprocessing.errors import record
-from torch.nn.parallel import DistributedDataParallel as DDP
-from torch.utils.tensorboard import SummaryWriter
-from transformers import (
-    AutoConfig,
-    AutoTokenizer,
-    PreTrainedModel,
-    PreTrainedTokenizer,
-    PreTrainedTokenizerFast,
-)
+from model.MatchModel_multi_classification import BertModel_multi_classify, RobertaModel_multi_classify
 from utils.evaluate import Evaluator1
 
 
@@ -657,7 +643,7 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
 @record
 def main() -> None:
     # * Request GPU memory
-    # allocate_gpu_memory(0.8)
+    allocate_gpu_memory(0.8)
 
     # * Loading model
     model, tokenizer = load_model()
