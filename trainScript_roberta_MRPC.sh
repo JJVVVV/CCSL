@@ -16,7 +16,7 @@ dataset_name="MRPC"
 part="all"
 text_type='ORI'
 # text_type='DATA_AUG_REP4'
-# text_type='JUST_DATA_AUG_ORI'
+text_type='JUST_DATA_AUG_ORI'
 
 min_threshold=None
 alpha=None
@@ -35,7 +35,7 @@ test_in_epoch=True
 accumulate_step=1
 if [[ $text_type == "JUST_DATA_AUG"* ]]; then
   batch_size=64
-  batch_size=16
+  # batch_size=16
 else
   batch_size=16
 fi
@@ -149,6 +149,7 @@ do
         --part $part \
         --model_dir $model_dir \
         --parallel_mode DDP \
+        --save_ckpts False \
         --save_last_ckpt False \
         --show_lr False \
         --show_step False \
@@ -184,6 +185,7 @@ do
       --alpha $alpha \
       --part $part \
       --model_dir $model_dir \
+      --save_ckpts False \
       --save_last_ckpt False \
       --logging_steps 1 \
       --show_lr False \

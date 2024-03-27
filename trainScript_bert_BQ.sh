@@ -4,7 +4,7 @@
 
 seeds=(68 149 109 97 43)
 
-CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+CUDA_VISIBLE_DEVICES=0/1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
 # CUDA_VISIBLE_DEVICES=5/6/7
 
@@ -25,7 +25,7 @@ alpha=None
 model_type="bert-base-chinese"
 
 
-model_dir="../pretrained/$model_type"
+model_dir="../../pretrained/$model_type"
 
 
 model_name='Baseline_nodrop_baseline'
@@ -47,10 +47,10 @@ test_in_epoch=True
 accumulate_step=1
 if [[ $text_type == "JUST_DATA_AUG"* ]]; then
   batch_size=64
-  batch_size=16
+  # batch_size=16
 else
   batch_size=16
-fi 
+fi
 batch_size_infer=64
 epochs=3
 max_length_input=512
@@ -161,6 +161,7 @@ do
         --part $part \
         --model_dir $model_dir \
         --parallel_mode DDP \
+        --save_ckpts False \
         --save_last_ckpt False \
         --show_lr False \
         --show_step False \
@@ -196,6 +197,7 @@ do
       --alpha $alpha \
       --part $part \
       --model_dir $model_dir \
+      --save_ckpts False \
       --save_last_ckpt False \
       --logging_steps 1 \
       --show_lr False \

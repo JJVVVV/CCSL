@@ -45,7 +45,7 @@ do
     text_type='ORI'
     # text_type='DATA_AUG_REP4'
     # text_type='JUST_DATA_AUG_REP4'
-    # text_type='JUST_DATA_AUG_ORI'
+    text_type='JUST_DATA_AUG_ORI'
 
     # text_type='DATA_AUG_REP4_FUSED'
     # text_type='JUST_DATA_AUG6'
@@ -61,7 +61,12 @@ do
     test_in_epoch=True
 
     accumulate_step=1
-    batch_size=16
+    if [[ $text_type == "JUST_DATA_AUG"* ]]; then
+      batch_size=64
+      # batch_size=16
+    else
+      batch_size=16
+    fi
     batch_size_infer=64
     epochs=3
     max_length_input=512
@@ -158,6 +163,7 @@ do
           --part $part \
           --model_dir $model_dir \
           --parallel_mode DDP \
+          --save_ckpts False \
           --save_last_ckpt False \
           --show_lr False \
           --show_step False \
@@ -193,6 +199,7 @@ do
         --alpha $alpha \
         --part $part \
         --model_dir $model_dir \
+        --save_ckpts False \
         --save_last_ckpt False \
         --logging_steps 1 \
         --show_lr False \
