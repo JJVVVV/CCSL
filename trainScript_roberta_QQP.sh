@@ -21,10 +21,10 @@ declare -A pid_cuda
 
 
 seeds=(52 78 44 2 22)
-seeds=(78)
 
 
 model_names=("Baseline_nodrop_baseline")
+model_names=("Baseline_nodrop_baseline_lossx4")
 # model_names=("TIWR_nodrop_single_model")
 
 auxloss_warmup_steps=1

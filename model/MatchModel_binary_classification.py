@@ -8,7 +8,13 @@ import torch.nn as nn
 import torch.nn.functional as F
 from toolkit.training.loss_functions import PairInBatchNegCoSentLoss, cos_loss, kl_loss
 from torch import Tensor
-from transformers import BertConfig, BertModel, PreTrainedModel, RobertaConfig, RobertaModel
+from transformers import (
+    BertConfig,
+    BertModel,
+    PreTrainedModel,
+    RobertaConfig,
+    RobertaModel,
+)
 from transformers.configuration_utils import PretrainedConfig
 from transformers.modeling_outputs import BaseModelOutputWithPoolingAndCrossAttentions
 
@@ -22,6 +28,7 @@ class RobertaModel_binary_classify(RobertaModel):
         self.tanh = nn.Tanh()
         self.classifier = nn.Linear(config.hidden_size, 1)
         self.loss_func = nn.BCEWithLogitsLoss()
+        # self.loss_func = nn.BCEWithLogitsLoss(reduction="sum")
 
     def forward(
         self,
@@ -43,6 +50,7 @@ class RobertaModel_binary_classify(RobertaModel):
 
         loss = self.loss_func(logits, labels.float())
         ret["loss"] = loss
+        # ret["loss"] = loss / 16
         return ret
 
 
