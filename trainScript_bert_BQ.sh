@@ -3,6 +3,8 @@
 # nohup ./trainScript_bert_BQ.sh > /dev/null 2>&1 &
 
 seeds=(68 149 109 97 43)
+# seeds=(0)
+
 
 CUDA_VISIBLE_DEVICES=1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
@@ -17,7 +19,7 @@ part="all"
 
 text_type='ORI'
 # text_type='DATA_AUG_REP4'
-text_type='JUST_DATA_AUG_ORI'
+# text_type='JUST_DATA_AUG_ORI'
 
 min_threshold=None
 alpha=None
@@ -207,6 +209,7 @@ do
       --record_cheat False \
       --model_structure $model_structure \
       --task_type $task_type \
+      --padding_to_max_length False \
       > $log_file 2>&1 &
   fi
     # --fp16 \

@@ -47,6 +47,8 @@ class TextType(Enum):
     DATA_AUG_REP6 = auto()
     GAUSSIAN_LABEL = auto()
     SORTED_DATA = auto()
+    CHECK_HAL = auto()
+    CHECK_HAL2 = auto()
     # ONLY_POS = auto()
 
 
@@ -131,6 +133,11 @@ def load_data_fn_qqp_lcqmc_bq_mrpc(
     for _, row in df.iterrows():
         # input
         match text_type:
+            case TextType.CHECK_HAL:
+                inputs.append(PairedText(row[key1], row["rephrase1"]))
+                inputs.append(PairedText(row[key2], row["rephrase2"]))
+            case TextType.CHECK_HAL2:
+                inputs.append(PairedText(row["rephrase1"], row["rephrase2"]))
             case TextType.ORI | TextType.GAUSSIAN_LABEL | TextType.SORTED_DATA:
                 inputs.append(PairedText(row[key1], row[key2]))
                 # inputs.append(((False, CLS), (True, dict_obj[key1]), (False, SEP), (True, dict_obj[key2]), (False, SEP)))
@@ -198,6 +205,9 @@ def load_data_fn_qqp_lcqmc_bq_mrpc(
                 labels.extend([ClassificationLabel(row["label"])] * 4 + [ClassificationLabel(1)] * 2)
             case (TextType.JUST_DATA_AUG_REP4 | TextType.JUST_DATA_AUG_ORI, Split.TRAINING):
                 labels.extend([ClassificationLabel(row["label"]) for _ in range(4)])
+            case (TextType.CHECK_HAL, _):
+                labels.append([1])
+                labels.append([1])
             case _:
                 labels.append([row["label"]])
 
