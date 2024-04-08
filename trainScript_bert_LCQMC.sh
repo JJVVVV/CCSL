@@ -3,7 +3,7 @@
 # nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &
 
 
-CUDA_VISIBLE_DEVICES=1
+CUDA_VISIBLE_DEVICES=0/1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
 # CUDA_VISIBLE_DEVICES=5/6/7
 
@@ -33,7 +33,7 @@ do
   dataset_name="LCQMC"
   part="all"
   text_type='ORI'
-  # text_type='DATA_AUG_REP4'
+  text_type='DATA_AUG_REP4'
   # text_type='JUST_DATA_AUG_ORI'
 
   min_threshold=None
@@ -46,7 +46,7 @@ do
 
 
   model_name='Baseline_nodrop_baseline'
-  # model_name='TIWR_nodrop_single_model'
+  model_name='TIWR_nodrop_single_model'
   
   auxloss_warmup_steps=3
   # model_name="nodrop_single_model_auxloss=logits_warmupepoch=$auxloss_warmup_steps"
@@ -210,7 +210,7 @@ do
       --show_step False \
       --cache_dataset True \
       --auxloss_warmup_steps $auxloss_warmup_steps \
-      --record_cheat False \
+      --record_cheat True \
       --model_structure $model_structure \
       --task_type $task_type \
       > $log_file 2>&1 &

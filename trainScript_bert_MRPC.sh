@@ -4,8 +4,9 @@
 
 
 seeds=(59 13 43 71 56)
+# seeds=(67 131 103 53 107)
 
-CUDA_VISIBLE_DEVICES=0/1/
+CUDA_VISIBLE_DEVICES=1
 # CUDA_VISIBLE_DEVICES=5/6/7
 
 # ###################################parameters#########################################
@@ -15,7 +16,7 @@ dashboard="None"
 dataset_name="MRPC"
 part="all"
 text_type='ORI'
-# text_type='DATA_AUG_REP4'
+text_type='DATA_AUG_REP4'
 # text_type='JUST_DATA_AUG_ORI'
 
 min_threshold=None
@@ -26,7 +27,7 @@ model_dir="../../pretrained/$model_type"
 
 
 model_name="Baseline_nodrop_baseline"
-# model_name="TIWR_nodrop_single_model"
+model_name="TIWR_nodrop_single_model"
 
 
 fp16=True

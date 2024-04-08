@@ -26,9 +26,10 @@
 
 
 
-PID=648418
+PID=3309016
 while kill -0 $PID 2> /dev/null; do
     sleep 10
 done
 # nohup ./trainScript_bert_BQ_hardcase_seed.sh > /dev/null 2>&1 &
+# nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
 nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
