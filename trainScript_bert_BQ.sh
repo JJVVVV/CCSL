@@ -3,10 +3,11 @@
 # nohup ./trainScript_bert_BQ.sh > /dev/null 2>&1 &
 
 seeds=(68 149 109 97 43)
+seeds=(10)
 # seeds=(0)
 
 
-CUDA_VISIBLE_DEVICES=0/1
+CUDA_VISIBLE_DEVICES=0
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
 # CUDA_VISIBLE_DEVICES=5/6/7
 
@@ -18,7 +19,7 @@ dataset_name="BQ"
 part="all"
 
 text_type='ORI'
-text_type='DATA_AUG_REP4'
+# text_type='DATA_AUG_REP4'
 # text_type='JUST_DATA_AUG_ORI'
 
 min_threshold=None
@@ -31,7 +32,7 @@ model_dir="../../pretrained/$model_type"
 
 
 model_name='Baseline_nodrop_baseline'
-model_name='TIWR_nodrop_single_model'
+# model_name='TIWR_nodrop_single_model'
 
 auxloss_warmup_steps=3
 # model_name="nodrop_single_model_auxloss=logits"

@@ -5,8 +5,8 @@
 # while kill -0 $PID 2>/dev/null; do sleep 1; done
 
 
-# CUDA_VISIBLE_DEVICES=0/1/2/3/
-CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+CUDA_VISIBLE_DEVICES=1
+# CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
 
 # 定义一个数组，存放可用cuda
 # IFS=',' cudas=($CUDA_VISIBLE_DEVICES) IFS=' '
@@ -24,6 +24,7 @@ declare -A pid_cuda
 # all_times=(0.2 0.4 0.6 0.8 1)
 all_times=(0.1 0.5 2 10)
 seeds_of_stage1=(68 149 109 97 43)
+seeds_of_stage1=(10)
 seeds=(38 11 16 50 68 149 109 97)
 
 
@@ -191,7 +192,7 @@ do
           --cache_dataset True \
           --seed_of_stage1 $seed_of_stage1 \
           --times $times \
-          --record_cheat False \
+          --record_cheat True \
           --model_structure $model_structure \
           --task_type $task_type \
           > $log_file 2>&1 &

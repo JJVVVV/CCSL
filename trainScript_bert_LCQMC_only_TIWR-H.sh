@@ -2,8 +2,8 @@
 
 # nohup ./trainScript_bert_LCQMC_only_TIWR-H.sh > /dev/null 2>&1 &
 
-# CUDA_VISIBLE_DEVICES=0/1/2/3/
-CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+CUDA_VISIBLE_DEVICES=0/1
+# CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
 
 # 定义一个数组，存放可用cuda
 # IFS=',' cudas=($CUDA_VISIBLE_DEVICES) IFS=' '
@@ -20,7 +20,8 @@ declare -A pid_cuda
 
 
 
-all_times=(0.2 0.4 0.6 0.8 1)
+# all_times=(0.2 0.4 0.6 0.8 1)
+all_times=(0.8)
 seeds_of_stage1=(42 109 38 62 54)
 seeds=(62 11 44 14 30 109 38 54)
 

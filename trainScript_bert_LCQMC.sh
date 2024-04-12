@@ -3,7 +3,7 @@
 # nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &
 
 
-CUDA_VISIBLE_DEVICES=0/1
+CUDA_VISIBLE_DEVICES=1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
 # CUDA_VISIBLE_DEVICES=5/6/7
 
@@ -22,6 +22,7 @@ declare -A pid_cuda
 
 
 seeds=(42 109 38 62 54)
+seeds=(0 2 4 6 8 10 12 14 16 18 20)
 
 # 遍历所有的种子
 for seed in ${seeds[@]}
