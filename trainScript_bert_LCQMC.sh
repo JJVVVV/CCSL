@@ -3,7 +3,7 @@
 # nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &
 
 
-CUDA_VISIBLE_DEVICES=1
+CUDA_VISIBLE_DEVICES=0/1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
 # CUDA_VISIBLE_DEVICES=5/6/7
 
@@ -23,6 +23,8 @@ declare -A pid_cuda
 
 seeds=(42 109 38 62 54)
 seeds=(0 2 4 6 8 10 12 14 16 18 20)
+
+seeds=(42 109 38 62 54 0 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25)
 
 # 遍历所有的种子
 for seed in ${seeds[@]}
@@ -48,6 +50,7 @@ do
 
   model_name='Baseline_nodrop_baseline'
   model_name='TIWR_nodrop_single_model'
+  model_name="TWR_nodrop_single_model"
   
   auxloss_warmup_steps=3
   # model_name="nodrop_single_model_auxloss=logits_warmupepoch=$auxloss_warmup_steps"

@@ -2,8 +2,8 @@
 
 # nohup ./trainScript_bert_BQ_only_TIWR-H.sh > /dev/null 2>&1 &
 
-# CUDA_VISIBLE_DEVICES=0/1/2/3/
-CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+CUDA_VISIBLE_DEVICES=0/1
+# CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
 
 # 定义一个数组，存放可用cuda
 # IFS=',' cudas=($CUDA_VISIBLE_DEVICES) IFS=' '

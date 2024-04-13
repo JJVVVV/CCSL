@@ -24,21 +24,9 @@ from toolkit.training.initializer import allocate_gpu_memory, initialize
 from torch.distributed.elastic.multiprocessing.errors import record
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.tensorboard import SummaryWriter
-from transformers import (
-    AutoConfig,
-    AutoTokenizer,
-    PreTrainedModel,
-    PreTrainedTokenizer,
-    PreTrainedTokenizerFast,
-)
+from transformers import AutoConfig, AutoTokenizer, PreTrainedModel, PreTrainedTokenizer, PreTrainedTokenizerFast
 
-from load_data_fns import (
-    DATASET_CLASSNUM_MAP,
-    LOAD_DATA_FNS,
-    DatasetName,
-    TextType,
-    key_map,
-)
+from load_data_fns import DATASET_CLASSNUM_MAP, LOAD_DATA_FNS, DatasetName, TextType, key_map
 from model.MatchModel_binary_classification import (  # BertModelFirst,; RobertaModel_4times_4classifier_bi,; RobertaModel_6times_bi,; BertModel_rephrase_IWR,; RobertaModel_rephrase_IWR,
     BertModel_binary_classify,
     BertModel_rephrase,
@@ -62,10 +50,7 @@ from model.MatchModel_binary_classification import (  # BertModelFirst,; Roberta
     RobertaMultiModel_rephrase_share_classifier,
     RobertaMultiModel_rephrase_withfused,
 )
-from model.MatchModel_multi_classification import (
-    BertModel_multi_classify,
-    RobertaModel_multi_classify,
-)
+from model.MatchModel_multi_classification import BertModel_multi_classify, RobertaModel_multi_classify
 from utils.evaluate import Evaluator1
 
 
@@ -349,6 +334,8 @@ def load_dataset(tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast) -> tu
 
 
 class _Evaluator1(Evaluator):
+    confused_use_ot = False
+
     def calculate_metric_callback(self, all_labels: list, all_logits: list, mean_loss: float) -> MetricDict:
         # print(all_logits)
         all_labels = np.array(all_labels)
@@ -375,7 +362,8 @@ class _Evaluator1(Evaluator):
                     definite_mask = (vote_pos == all_ori_preds.shape[1]) | (vote_pos == 0)
                     confused_mask = ~(definite_mask | controversial_mask)
                     # # if confused, then use original text
-                    # all_preds[confused_mask] = all_ori_preds[confused_mask][:, 0]
+                    if self.confused_use_ot:
+                        all_preds[confused_mask] = all_ori_preds[confused_mask][:, 0]
                 elif TEXTTYPE == TextType.GAUSSIAN_LABEL:
                     # all_logtis: (num, 100)
                     all_preds = (np.argmax(all_logits, axis=1, keepdims=True) >= 50).astype(int)
@@ -870,6 +858,10 @@ if __name__ == "__main__":
     #     local_rank, world_size = 0, 1
     #     torch.cuda.set_device(0)
     # setup_seed(configs.seed)
+
+    if "TWR" in configs.model_name:
+        _Evaluator1.confused_use_ot = True
+        logger.warning("### TWR ###")
 
     # * Global variable
     DATASETNAME = DatasetName[configs.dataset_name]
