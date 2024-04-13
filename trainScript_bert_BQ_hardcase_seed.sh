@@ -23,6 +23,7 @@ declare -A pid_cuda
 
 # all_times=(0.2 0.4 0.6 0.8 1)
 all_times=(0.1 0.5 2 10)
+all_times=(0.1)
 seeds_of_stage1=(68 149 109 97 43)
 seeds_of_stage1=(10)
 seeds=(38 11 16 50 68 149 109 97)
@@ -59,6 +60,7 @@ do
       # model_name="TIWR-P_nodrop_single_model_hardcases_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
 
       model_dir="../pretrained/$model_type"
+      model_dir="../../pretrained_models/$model_type"
 
       fp16=True
       test_in_epoch=True

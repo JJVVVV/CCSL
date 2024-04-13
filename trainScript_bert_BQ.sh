@@ -3,7 +3,7 @@
 # nohup ./trainScript_bert_BQ.sh > /dev/null 2>&1 &
 
 seeds=(68 149 109 97 43)
-seeds=(10)
+# seeds=(10)
 # seeds=(0)
 
 
@@ -20,6 +20,7 @@ part="all"
 
 text_type='ORI'
 # text_type='DATA_AUG_REP4'
+
 # text_type='JUST_DATA_AUG_ORI'
 
 min_threshold=None
@@ -29,6 +30,7 @@ model_type="bert-base-chinese"
 
 
 model_dir="../../pretrained/$model_type"
+model_dir="../../pretrained_models/$model_type"
 
 
 model_name='Baseline_nodrop_baseline'

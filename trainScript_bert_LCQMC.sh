@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# A100: 192.168.126.81
 # nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &
 
 
@@ -22,7 +22,7 @@ declare -A pid_cuda
 
 
 seeds=(42 109 38 62 54)
-seeds=(0 2 4 6 8 10 12 14 16 18 20)
+# seeds=(0 2 4 6 8 10 12 14 16 18 20)
 
 seeds=(42 109 38 62 54 0 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25)
 
@@ -45,6 +45,7 @@ do
   model_type="bert-base-chinese"
 
   model_dir="../../pretrained/$model_type"
+  model_dir="../../pretrained_models/$model_type"
 
 
 
