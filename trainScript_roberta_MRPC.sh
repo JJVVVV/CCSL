@@ -23,7 +23,7 @@ alpha=None
 
 model_type="roberta-base"
 model_dir="../../pretrained/$model_type"
-
+model_dir="../../pretrained_models/$model_type"
 
 model_name="Baseline_nodrop_baseline"
 model_name="TIWR_nodrop_single_model"

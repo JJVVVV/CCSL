@@ -2,7 +2,7 @@
 
 # nohup ./trainScript_bert_LCQMC_only_TIWR-H.sh > /dev/null 2>&1 &
 
-CUDA_VISIBLE_DEVICES=0/1
+CUDA_VISIBLE_DEVICES=1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
 
 # 定义一个数组，存放可用cuda
@@ -53,6 +53,7 @@ do
 
 
       model_dir="../pretrained/$model_type"
+      model_dir="../../pretrained_models/$model_type"
 
       fp16=True
       test_in_epoch=True
