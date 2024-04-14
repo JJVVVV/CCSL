@@ -45,7 +45,7 @@ do
   model_type="bert-base-chinese"
 
   model_dir="../../pretrained/$model_type"
-  model_dir="../../pretrained_models/$model_type"
+  # model_dir="../../pretrained_models/$model_type"
 
 
 

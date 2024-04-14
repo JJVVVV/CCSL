@@ -58,7 +58,7 @@ do
       # model_name="nodrop_single_model_auxloss=kl_warmupepoch=${auxloss_warmup_steps}_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
 
       model_dir="../pretrained/$model_type"
-      model_dir="../../pretrained_models/$model_type"
+      # model_dir="../../pretrained_models/$model_type"
 
       fp16=True
       test_in_epoch=True
