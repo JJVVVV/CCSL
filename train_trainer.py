@@ -296,7 +296,7 @@ def load_dataset(tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast) -> tu
         val_dataset = TextDataset.from_file(
             (
                 configs.val_file_path
-                if ("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name)
+                if ("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name or "TWR-H" in configs.model_name)
                 else create_hardcases_data_file("VALIDATION")
             ),
             tokenizer,
@@ -305,7 +305,7 @@ def load_dataset(tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast) -> tu
             load_data_fn=LOAD_DATA_FNS[DATASETNAME],
             text_type=TEXTTYPE,
             dataset_name=DATASETNAME,
-            use_cache=("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name),
+            use_cache=("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name or "TWR-H" in configs.model_name),
         )
     except TypeError as e:
         if local_rank == 0:
@@ -315,7 +315,7 @@ def load_dataset(tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast) -> tu
         test_dataset = TextDataset.from_file(
             (
                 configs.test_file_path
-                if ("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name)
+                if ("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name or "TWR-H" in configs.model_name)
                 else create_hardcases_data_file("TEST")
             ),
             tokenizer,
@@ -324,7 +324,7 @@ def load_dataset(tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast) -> tu
             load_data_fn=LOAD_DATA_FNS[DATASETNAME],
             text_type=TEXTTYPE,
             dataset_name=DATASETNAME,
-            use_cache=("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name),
+            use_cache=("hardcases" not in configs.model_name or "TIWR-H" in configs.model_name or "TWR-H" in configs.model_name),
         )
     except TypeError as e:
         if local_rank == 0:
@@ -376,7 +376,7 @@ class _Evaluator1(Evaluator):
         if DATASET_CLASSNUM_MAP[DATASETNAME] == 2:
             if "hardcases" in self.config.model_name:
                 controversial_cases, confused_cases, definite_cases = get_contro_confused_definite_cases(self.split.name)
-                if "TIWR-H" in configs.model_name:
+                if "TIWR-H" in configs.model_name or "TWR-H" in configs.model_name:
                     labels = all_labels.reshape(-1)
                     preds = all_preds.reshape(-1)
                     acc = accuracy_score(labels, preds)
@@ -701,7 +701,10 @@ if __name__ == "__main__":
                             "outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/nodrop_single_model_auxloss=kl_warmupepoch=1/3/16/3e-05"
                         )
                     else:
-                        stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
+                        if "TWR" in configs.model_name:
+                            stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/3e-05")
+                        else:
+                            stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
                 else:
                     stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
@@ -748,7 +751,10 @@ if __name__ == "__main__":
                             "outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin=1/3/16/3e-05"
                         )
                     else:
-                        stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
+                        if "TWR" in configs.model_name:
+                            stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/3e-05")
+                        else:
+                            stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
                 else:
                     stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
@@ -779,7 +785,10 @@ if __name__ == "__main__":
                     if "after_contrast_margin=1" in configs.model_name:
                         stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin=1/3/16/3e-05")
                     else:
-                        stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
+                        if "TWR" in configs.model_name:
+                            stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/3e-05")
+                        else:
+                            stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
                 else:
                     stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
@@ -808,7 +817,10 @@ if __name__ == "__main__":
         if "warmboost" in configs.model_name:
             if "single" in configs.model_name or "baseline" in configs.model_name or "s2m" in configs.model_name:
                 if "nodrop" in configs.model_name:
-                    stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/2e-05")
+                    if "TWR" in configs.model_name:
+                        stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/2e-05")
+                    else:
+                        stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/2e-05")
                 else:
                     stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/single_model/3/16/2e-05")
             elif "multi" in configs.model_name:
