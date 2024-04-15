@@ -24,7 +24,11 @@ declare -A pid_cuda
 seeds=(42 109 38 62 54)
 # seeds=(0 2 4 6 8 10 12 14 16 18 20)
 
-seeds=(42 109 38 62 54 0 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25)
+seeds=(42 109 38 62 54 0 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24)
+seeds=(27 37 44 45 46 47 48 49 50 51)
+seeds=(25 26 28 29)
+# 30 31 32 33 34 35 36 39 40 41 43
+
 
 # 遍历所有的种子
 for seed in ${seeds[@]}
@@ -36,7 +40,7 @@ do
   dataset_name="LCQMC"
   part="all"
   text_type='ORI'
-  text_type='DATA_AUG_REP4'
+  # text_type='DATA_AUG_REP4'
   # text_type='JUST_DATA_AUG_ORI'
 
   min_threshold=None
@@ -50,8 +54,8 @@ do
 
 
   model_name='Baseline_nodrop_baseline'
-  model_name='TIWR_nodrop_single_model'
-  model_name="TWR_nodrop_single_model"
+  # model_name='TIWR_nodrop_single_model'
+  # model_name="TWR_nodrop_single_model"
   
   auxloss_warmup_steps=3
   # model_name="nodrop_single_model_auxloss=logits_warmupepoch=$auxloss_warmup_steps"
