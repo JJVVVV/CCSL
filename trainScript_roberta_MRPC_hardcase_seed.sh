@@ -6,8 +6,8 @@
 
 
 
-# CUDA_VISIBLE_DEVICES=0/1/2/3/
-CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+CUDA_VISIBLE_DEVICES=0/1
+# CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
 
 # 定义一个数组，存放可用cuda
 # IFS=',' cudas=($CUDA_VISIBLE_DEVICES) IFS=' '
@@ -24,6 +24,7 @@ declare -A pid_cuda
 
 all_times=(0.2 0.4 0.6 0.8 1)
 seeds_of_stage1=(59 13 43 71 56)
+seeds_of_stage1=(9 37 59 2 44)
 seeds=(13 16 24 0 14 59 43 71)
 
 
@@ -49,6 +50,8 @@ do
       model_type="roberta-base"
 
       model_name="TIWR-P_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      model_name="TWR-P_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+
       # model_name="nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
 
       # model_name="TIWR-P_mismatch_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
