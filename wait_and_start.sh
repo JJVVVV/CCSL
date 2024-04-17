@@ -26,7 +26,7 @@
 
 
 
-PID=3988387
+PID=586423
 while kill -0 $PID 2> /dev/null; do
     sleep 10
 done
@@ -36,4 +36,5 @@ done
 # nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &
 # nohup ./trainScript_roberta_MRPC.sh > /dev/null 2>&1 &
 # nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &
-nohup ./trainScript_roberta_MRPC_only_TIWR-H.sh > /dev/null 2>&1 &
+# nohup ./trainScript_roberta_MRPC_only_TIWR-H.sh > /dev/null 2>&1 &
+nohup bash qwen_infer.sh > qwen_infer.log  2>&1 &
