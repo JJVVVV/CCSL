@@ -47,7 +47,7 @@ class FewShotCasesGenerator:
                 return ret + "Now, determine whether the following two sentences express the same meaning. Just answer 'yes' or 'no':\n"
 
 
-def main(dataset, cases_num, batch_size: int = None):
+def main(dataset, cases_num, batch_size: int | None = None):
     print("-----------------params-----------------")
     print("dataset:", dataset)
     print("cases_num: ", cases_num)
@@ -85,6 +85,12 @@ def main(dataset, cases_num, batch_size: int = None):
         model_dir, trust_remote_code=True, torch_dtype="auto", low_cpu_mem_usage=True, bf16=True, use_flash_attn=False, device_map="auto"
     ).eval()
     model.tie_weights()
+
+    # model = AutoModelForCausalLM.from_pretrained(
+    #     model_dir, trust_remote_code=True, torch_dtype="auto", low_cpu_mem_usage=True, bf16=True, use_flash_attn=False,
+    # ).eval()
+    # model.cuda()
+
     # exit(1)
     # model.to(device)
     # response, history = model.chat(tokenizer, query="hello", history=None)
@@ -110,11 +116,11 @@ def main(dataset, cases_num, batch_size: int = None):
     # dataset = "QQP"
     # split = "test"
     split = "val" if dataset == "QQP" else "test"
+    part = "0-999999"
     # part = "120-124"
-    # part = '0-2'
+    # part = "0-4"
     # part = [25, 41, 54, 61, 192, 247, 475, 481, 704, 789, 1260, 1385]
     # part=[180, 181, 604, 2844, 2891]
-    part = "0-999999"
     # cases_num = 10
 
     # prompt_type = "rephrase"
@@ -280,7 +286,7 @@ def main(dataset, cases_num, batch_size: int = None):
                 #     import pdb; pdb.set_trace()
                 inputs.append(a_sample)
                 labels.append(ClassificationLabel(row["label"]))
-                customs.append({"question1": row["question1"], "question2": row["question2"]})
+                customs.append({key_map[dataset][0]: row[key_map[dataset][0]], key_map[dataset][1]: row[key_map[dataset][1]]})
 
         return inputs, labels, customs
 
@@ -357,14 +363,14 @@ def main(dataset, cases_num, batch_size: int = None):
                 # messages = []
                 # messages.append({"role":"user", "content": ""})
                 output_batch = [
-                    {"question1": q1, "question2": q2, "label": label.item(), "response": reason}
-                    for q1, q2, label, reason in zip(custom_inputs["question1"], custom_inputs["question2"], labels, texts)
+                    {key_map[dataset][0]: q1, key_map[dataset][1]: q2, "label": label.item(), "response": reason}
+                    for q1, q2, label, reason in zip(custom_inputs[key_map[dataset][0]], custom_inputs[key_map[dataset][1]], labels, texts)
                 ]
             except Exception as e:
                 print(e)
                 output_batch = [
-                    {"question1": q1, "question2": q2, "label": label.item(), "response": "<Failure>"}
-                    for q1, q2, label in zip(custom_inputs["question1"], custom_inputs["question2"], labels)
+                    {key_map[dataset][0]: q1, key_map[dataset][1]: q2, "label": label.item(), "response": "<Failure>"}
+                    for q1, q2, label in zip(custom_inputs[key_map[dataset][0]], custom_inputs[key_map[dataset][1]], labels)
                 ]
             ret.extend(output_batch)
             cur_batch_idx += 1
