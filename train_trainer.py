@@ -377,11 +377,14 @@ class _Evaluator1(Evaluator):
             if "hardcases" in self.config.model_name:
                 controversial_cases, confused_cases, definite_cases = get_contro_confused_definite_cases(self.split.name)
                 if "TIWR-H" in configs.model_name or "TWR-H" in configs.model_name:
+                    index_hard = None
                     labels = all_labels.reshape(-1)
                     preds = all_preds.reshape(-1)
                     acc = accuracy_score(labels, preds)
                     f1 = f1_score(labels, preds, average="binary")
                 else:
+                    index_hard = list(controversial_cases.keys())
+                    index_hard.extend(confused_cases.keys())
                     labels = [d["labels"] for d in definite_cases.values()]
                     preds = [d["pred"] for d in definite_cases.values()]
                     logger.debug(
@@ -448,26 +451,31 @@ class _Evaluator1(Evaluator):
             confused_cases = dict()
             text_type = TextType[self.config.text_type]
 
+
             for i in range(len(self.dataset)):
+                if index_hard is not None:
+                    case_id = index_hard[i]
+                else:
+                    case_id = i
                 if all_preds[i] != all_labels[i]:
-                    bad_cases[i] = {"text": self.dataset.texts_input[i].tolist(), "pred": all_preds[i].item(), "labels": all_labels[i].item()}
+                    bad_cases[case_id] = {"text": self.dataset.texts_input[i].tolist(), "pred": all_preds[i].item(), "labels": all_labels[i].item()}
                 if "DATA_AUG_REP" in text_type.name:
                     if controversial_mask.size and controversial_mask[i]:
-                        controversial_cases[i] = {
+                        controversial_cases[case_id] = {
                             "text": self.dataset.texts_input[i].tolist(),
                             "pred": all_preds[i].item(),
                             "labels": all_labels[i].item(),
                             "ori_labels": all_ori_preds[i].tolist(),
                         }
                     if confused_mask.size and confused_mask[i]:
-                        confused_cases[i] = {
+                        confused_cases[case_id] = {
                             "text": self.dataset.texts_input[i].tolist(),
                             "pred": all_preds[i].item(),
                             "labels": all_labels[i].item(),
                             "ori_labels": all_ori_preds[i].tolist(),
                         }
                     if definite_mask.size and definite_mask[i]:
-                        definite_cases[i] = {
+                        definite_cases[case_id] = {
                             "text": self.dataset.texts_input[i].tolist(),
                             "pred": all_preds[i].item(),
                             "labels": all_labels[i].item(),
