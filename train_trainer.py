@@ -654,7 +654,7 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
 @record
 def main() -> None:
     # * Request GPU memory
-    # allocate_gpu_memory(0.8)
+    allocate_gpu_memory(0.8)
 
     # * Loading model
     model, tokenizer = load_model()

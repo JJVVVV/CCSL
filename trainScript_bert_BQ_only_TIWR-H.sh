@@ -2,7 +2,7 @@
 
 # nohup ./trainScript_bert_BQ_only_TIWR-H.sh > /dev/null 2>&1 &
 
-CUDA_VISIBLE_DEVICES=0/1
+CUDA_VISIBLE_DEVICES=1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
 
 # 定义一个数组，存放可用cuda
@@ -21,10 +21,11 @@ declare -A pid_cuda
 
 all_times=(0.2 0.4 0.6 0.8 1)
 # all_times=(0.1 0.5 2 10)
-# all_times=(0.1)
+all_times=(0.1)
 seeds_of_stage1=(68 149 109 97 43)
 seeds_of_stage1=(97 53 10 43 46)
 seeds=(38 11 16 50 68 42 109 0)
+seeds=(22 4 5 12 50 28 26 30 31 34 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 69 70)
 
 
 
@@ -53,7 +54,7 @@ do
       # model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
       model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
       model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_negtimes=${times}/seed_of_stage1=$seed_of_stage1"
-      model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      # model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
 
 
 
