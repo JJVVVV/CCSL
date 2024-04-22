@@ -250,16 +250,35 @@ def create_hardcases_data_file(split="TEST"):
             print(round(count[1] / len(df) * 100), "%  : ", round(count[0] / len(df) * 100), "%")
 
         if "fix_num" in configs.model_name and configs.times is not None:
-            total = len(df)
-            num_hard = int(total * configs.times)
-            num_easy = min(total - num_hard, len(df_easy))
-            df = pd.concat(
-                [df.sample(num_hard, random_state=configs.seed, replace=False), df_easy.sample(num_easy, random_state=configs.seed, replace=False)],
-                axis=0,
-            )
-            print("After mix part of hardcases and easycases: ")
-            print(count := df["label"].value_counts())
-            print(round(count[1] / len(df) * 100), "%  : ", round(count[0] / len(df) * 100), "%")
+            if "only_pos" in configs.model_name:
+                total = len(df)
+                num_hard = int(total * configs.times)
+                num_easy = min(total - num_hard, len(df_easy))
+                df_easy = df_easy[df_easy["label"] == 1]
+                df = pd.concat(
+                    [
+                        df.sample(num_hard, random_state=configs.seed, replace=False),
+                        df_easy.sample(num_easy, random_state=configs.seed, replace=False),
+                    ],
+                    axis=0,
+                )
+                print("After mix part of hardcases and easycases: ")
+                print(count := df["label"].value_counts())
+                print(round(count[1] / len(df) * 100), "%  : ", round(count[0] / len(df) * 100), "%")
+            else:
+                total = len(df)
+                num_hard = int(total * configs.times)
+                num_easy = min(total - num_hard, len(df_easy))
+                df = pd.concat(
+                    [
+                        df.sample(num_hard, random_state=configs.seed, replace=False),
+                        df_easy.sample(num_easy, random_state=configs.seed, replace=False),
+                    ],
+                    axis=0,
+                )
+                print("After mix part of hardcases and easycases: ")
+                print(count := df["label"].value_counts())
+                print(round(count[1] / len(df) * 100), "%  : ", round(count[0] / len(df) * 100), "%")
     return df
     # logger.debug(f"Saving {split} data file ...")
     # data_file_dir.parent.mkdir(parents=True, exist_ok=True)
@@ -373,6 +392,7 @@ class _Evaluator1(Evaluator):
             case _:
                 all_preds = np.argmax(all_logits, axis=1, keepdims=True)
 
+        metric_dict = MetricDict()
         if DATASET_CLASSNUM_MAP[DATASETNAME] == 2:
             if "hardcases" in self.config.model_name:
                 controversial_cases, confused_cases, definite_cases = get_contro_confused_definite_cases(self.split.name)
@@ -382,6 +402,46 @@ class _Evaluator1(Evaluator):
                     preds = all_preds.reshape(-1)
                     acc = accuracy_score(labels, preds)
                     f1 = f1_score(labels, preds, average="binary")
+                    if "record_pipline" in self.config.model_name:
+                        MetricDict.custom_metric_scale_map = {"acc_pipline": 1, "f1_pipline": 1}
+                        consistent_mask = np.zeros(len(labels)).astype(bool)
+                        consistent_mask[list(map(int, definite_cases.keys()))] = True
+                        inconsistent_mask = ~consistent_mask
+                        labels_inconcsistent_stage2 = labels[inconsistent_mask].tolist()
+                        preds_inconcsistent_stage2 = preds[inconsistent_mask].tolist()
+
+                        labels_concsistent_stage1 = [d["labels"] for d in definite_cases.values()]
+                        preds_concsistent_stage1 = [d["pred"] for d in definite_cases.values()]
+
+                        acc_consistent_stage1, f1_consistent_stage1 = (
+                            accuracy_score(labels_concsistent_stage1, preds_concsistent_stage1) * 100,
+                            f1_score(labels_concsistent_stage1, preds_concsistent_stage1) * 100,
+                        )
+                        acc_inconcsistent_stage2, f1_inconcsistent_stage2 = (
+                            accuracy_score(labels[inconsistent_mask], preds[inconsistent_mask]) * 100,
+                            f1_score(labels[inconsistent_mask], preds[inconsistent_mask]) * 100,
+                        )
+                        labels_inconcsistent_stage1 = [d["labels"] for d in controversial_cases.values()] + [
+                            d["labels"] for d in confused_cases.values()
+                        ]
+                        preds_inconcsistent_stage1 = [d["pred"] for d in controversial_cases.values()] + [d["pred"] for d in confused_cases.values()]
+                        acc_inconcsistent_stage1 = accuracy_score(labels_inconcsistent_stage1, preds_inconcsistent_stage1) * 100
+                        f1_inconcsistent_stage1 = f1_score(labels_inconcsistent_stage1, preds_inconcsistent_stage1) * 100
+                        logger.info("------------------------------------------------------------")
+                        logger.info(f"{self.split.name} consistent acc stage1: {acc_consistent_stage1:.2f}")
+                        logger.info(f"{self.split.name} consistent f1 stage1: {f1_consistent_stage1:.2f}")
+                        logger.info("------------------------------------------------------------")
+                        logger.info(f"{self.split.name} inconsistent acc stage1: {acc_inconcsistent_stage1:.2f}")
+                        logger.info(f"{self.split.name} inconsistent acc stage2: {acc_inconcsistent_stage2:.2f}")
+                        logger.info("------------------------------------------------------------")
+                        logger.info(f"{self.split.name} inconsistent f1 stage1: {f1_inconcsistent_stage1:.2f}")
+                        logger.info(f"{self.split.name} inconsistent f1 stage2: {f1_inconcsistent_stage2:.2f}")
+                        logger.info("------------------------------------------------------------")
+
+                        pipline_labels = labels_concsistent_stage1 + labels_inconcsistent_stage2
+                        pipline_preds = preds_concsistent_stage1 + preds_inconcsistent_stage2
+                        acc_pipline, f1_pipline = accuracy_score(pipline_labels, pipline_preds) * 100, f1_score(pipline_labels, pipline_preds) * 100
+                        metric_dict.update(MetricDict(acc_pipline=acc_pipline, f1_pipline=f1_pipline))
                 else:
                     index_hard = list(controversial_cases.keys())
                     index_hard.extend(confused_cases.keys())
@@ -451,7 +511,6 @@ class _Evaluator1(Evaluator):
             confused_cases = dict()
             text_type = TextType[self.config.text_type]
 
-
             for i in range(len(self.dataset)):
                 if index_hard is not None:
                     case_id = index_hard[i]
@@ -482,7 +541,7 @@ class _Evaluator1(Evaluator):
                             "ori_labels": all_ori_preds[i].tolist(),
                         }
             good_cases_idxs = set(range(len(self.dataset))) - set(bad_cases.keys())
-            metric_dict = MetricDict({"accuracy": acc * 100, "F1-score": f1 * 100, "loss": mean_loss})
+            metric_dict.update(MetricDict({"accuracy": acc * 100, "F1-score": f1 * 100, "loss": mean_loss}))
 
             file_path: Path = self.config.save_dir / "evaluator" / f"step={self.config.training_runtime['cur_step']}" / (self.split.name + ".json")
             file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -498,7 +557,7 @@ class _Evaluator1(Evaluator):
                 except IOError:
                     print("⚠️ Skip this operation because other programs are writing files ...")
             return metric_dict
-        metric_dict = MetricDict({"accuracy": acc * 100, "F1-score": f1 * 100, "loss": mean_loss})
+        metric_dict.update(MetricDict({"accuracy": acc * 100, "F1-score": f1 * 100, "loss": mean_loss}))
         return metric_dict
 
 

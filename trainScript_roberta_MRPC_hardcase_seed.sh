@@ -6,7 +6,7 @@
 
 
 
-CUDA_VISIBLE_DEVICES=0/1
+CUDA_VISIBLE_DEVICES=1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
 
 # 定义一个数组，存放可用cuda
@@ -23,9 +23,11 @@ pids=()
 declare -A pid_cuda
 
 all_times=(0.2 0.4 0.6 0.8 1)
+all_times=(0.4)
 seeds_of_stage1=(59 13 43 71 56)
 seeds_of_stage1=(9 37 59 2 44)
 seeds=(13 16 24 0 14 59 43 71)
+seeds=(1 2 3 4 5 6 7 8 9 10 12 15 17 18 19 20 21 22 23 25 26 27 28 29 30 31 32 33 34 35 36 37 39 40 41 44 45 46 47 48 49)
 
 
 for times in ${all_times[@]}
