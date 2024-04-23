@@ -380,6 +380,8 @@ class _Evaluator1(Evaluator):
                     all_preds[controversial_mask] = all_ori_preds[controversial_mask][:, 0]
                     definite_mask = (vote_pos == all_ori_preds.shape[1]) | (vote_pos == 0)
                     confused_mask = ~(definite_mask | controversial_mask)
+                    if "TIWR-H" in configs.model_name or "TWR-H" in configs.model_name:
+                        all_preds_vote = all_preds.copy()
                     # # if confused, then use original text
                     if self.confused_use_ot:
                         all_preds[confused_mask] = all_ori_preds[confused_mask][:, 0]
@@ -400,27 +402,29 @@ class _Evaluator1(Evaluator):
                     index_hard = None
                     labels = all_labels.reshape(-1)
                     preds = all_preds.reshape(-1)
+                    pred_vote = all_preds_vote.reshape(-1)
                     acc = accuracy_score(labels, preds)
                     f1 = f1_score(labels, preds, average="binary")
                     if "record_pipline" in self.config.model_name:
                         MetricDict.custom_metric_scale_map = {"acc_pipline": 1, "f1_pipline": 1}
+
                         consistent_mask = np.zeros(len(labels)).astype(bool)
                         consistent_mask[list(map(int, definite_cases.keys()))] = True
                         inconsistent_mask = ~consistent_mask
                         labels_inconcsistent_stage2 = labels[inconsistent_mask].tolist()
-                        preds_inconcsistent_stage2 = preds[inconsistent_mask].tolist()
+                        preds_inconcsistent_stage2 = pred_vote[inconsistent_mask].tolist()
+                        acc_inconcsistent_stage2, f1_inconcsistent_stage2 = (
+                            accuracy_score(labels_inconcsistent_stage2, preds_inconcsistent_stage2) * 100,
+                            f1_score(labels_inconcsistent_stage2, preds_inconcsistent_stage2) * 100,
+                        )
 
                         labels_concsistent_stage1 = [d["labels"] for d in definite_cases.values()]
                         preds_concsistent_stage1 = [d["pred"] for d in definite_cases.values()]
-
                         acc_consistent_stage1, f1_consistent_stage1 = (
                             accuracy_score(labels_concsistent_stage1, preds_concsistent_stage1) * 100,
                             f1_score(labels_concsistent_stage1, preds_concsistent_stage1) * 100,
                         )
-                        acc_inconcsistent_stage2, f1_inconcsistent_stage2 = (
-                            accuracy_score(labels[inconsistent_mask], preds[inconsistent_mask]) * 100,
-                            f1_score(labels[inconsistent_mask], preds[inconsistent_mask]) * 100,
-                        )
+
                         labels_inconcsistent_stage1 = [d["labels"] for d in controversial_cases.values()] + [
                             d["labels"] for d in confused_cases.values()
                         ]
