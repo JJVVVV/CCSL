@@ -570,7 +570,7 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
     global DATASETNAME, TEXTTYPE
     match DATASETNAME:
         case DatasetName.QQP | DatasetName.MRPC | DatasetName.LCQMC | DatasetName.BQ:
-            if "roberta" in configs.model_type:
+            if "roberta" in configs.model_type and "chinese" not in configs.model_type:
                 match TEXTTYPE:
                     case TextType.ORI:
                         if "baseline" in configs.model_name:
