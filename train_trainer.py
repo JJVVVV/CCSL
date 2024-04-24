@@ -395,6 +395,7 @@ class _Evaluator1(Evaluator):
                 all_preds = np.argmax(all_logits, axis=1, keepdims=True)
 
         metric_dict = MetricDict()
+        index_hard = None
         if DATASET_CLASSNUM_MAP[DATASETNAME] == 2:
             if "hardcases" in self.config.model_name:
                 controversial_cases, confused_cases, definite_cases = get_contro_confused_definite_cases(self.split.name)
