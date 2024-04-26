@@ -3,7 +3,7 @@
 # nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
 
 if [ -z "$1" ]; then
-  CUDA_VISIBLE_DEVICES=3
+  CUDA_VISIBLE_DEVICES=0
 else
   CUDA_VISIBLE_DEVICES=$1
 fi
