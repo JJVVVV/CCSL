@@ -2,9 +2,11 @@
 
 # nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
 
-CUDA_VISIBLE_DEVICES=1
-# CUDA_VISIBLE_DEVICES=0/1/2/3/4
-# CUDA_VISIBLE_DEVICES=5/6/7
+if [ -z "$1" ]; then
+  CUDA_VISIBLE_DEVICES=3
+else
+  CUDA_VISIBLE_DEVICES=$1
+fi
 
 # 定义一个数组，存放可用cuda
 # IFS=',' cudas=($CUDA_VISIBLE_DEVICES) IFS=' '
@@ -21,12 +23,12 @@ declare -A pid_cuda
 
 
 seeds=(52 78 44 2 22)
-seeds=(5 6 7 8 9 10 12 15 17 18 19 20 21 23 25 26 27 28 29 30 31 32 33 34 35)
+seeds=(52 78 44 2 22 5 6 7 8 9 10 12 15 17 18 19 20 21 23 25 26 27 28 29 30 31 32 33 34 35)
 
 
 model_names=("Baseline_nodrop_baseline")
 # model_names=("Baseline_nodrop_baseline_lossx4")
-model_names=("TIWR_nodrop_single_model")
+model_names=("TWR_nodrop_single_model")
 
 auxloss_warmup_steps=1
 # model_names=("nodrop_single_model_auxloss=kl_warmupepoch=$auxloss_warmup_steps")

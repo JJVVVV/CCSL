@@ -16,7 +16,7 @@ while true; do
   if [[ -n $free_gpu_arr ]]; then
     IFS="/" free_gpu="${free_gpu_arr[*]}"
     echo "Free GPU found: $free_gpu"
-    # nohup ./trainScript_macbert_LCQMC.sh $free_gpu > /dev/null 2>&1 &
+    nohup ./trainScript_roberta_QQP.sh $free_gpu > /dev/null 2>&1 &
     break
   else
     echo "No free GPU available"
