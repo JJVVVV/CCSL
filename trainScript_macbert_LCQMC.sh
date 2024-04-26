@@ -3,7 +3,7 @@
 # nohup ./trainScript_macbert_LCQMC.sh > /dev/null 2>&1 &
 
 if [ -z "$1" ]; then
-  CUDA_VISIBLE_DEVICES=2
+  CUDA_VISIBLE_DEVICES=3
 else
   CUDA_VISIBLE_DEVICES=$1
 fi
