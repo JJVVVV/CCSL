@@ -718,7 +718,7 @@ def load_model() -> tuple[PreTrainedModel | DDP, PreTrainedTokenizer | PreTraine
 @record
 def main() -> None:
     # * Request GPU memory
-    allocate_gpu_memory(0.8)
+    # allocate_gpu_memory(0.8)
 
     # * Loading model
     model, tokenizer = load_model()
@@ -934,7 +934,7 @@ if __name__ == "__main__":
     toolkit.set_file_logger(output_path_logger)
 
     # * Initalize parallel and seed
-    local_rank, world_size = initialize(configs)
+    local_rank, world_size = initialize(configs, 0.8)
     print("local_rank: ", local_rank, "world_size: ", world_size)
     # if configs.parallel:
     #     local_rank, world_size = setup_parallel()
