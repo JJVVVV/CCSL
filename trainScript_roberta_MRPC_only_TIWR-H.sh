@@ -2,8 +2,11 @@
 
 # nohup ./trainScript_roberta_MRPC_only_TIWR-H.sh > /dev/null 2>&1 &
 
-CUDA_VISIBLE_DEVICES=1
-# CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+if [ -z "$1" ]; then
+  CUDA_VISIBLE_DEVICES=3
+else
+  CUDA_VISIBLE_DEVICES=$1
+fi
 
 # 定义一个数组，存放可用cuda
 # IFS=',' cudas=($CUDA_VISIBLE_DEVICES) IFS=' '
@@ -50,6 +53,8 @@ do
 
       model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
       model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}_record_pipline/seed_of_stage1=$seed_of_stage1"
+      
 
       # model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
 
