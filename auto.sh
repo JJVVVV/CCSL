@@ -1,7 +1,7 @@
 #!/bin/bash
 # nohup ./auto.sh > auto.log 2>&1 &
 
-except_cuda=(0)
+except_cuda=(3)
 
 while true; do
   gpu_info=$(nvidia-smi --query-gpu=index,memory.used,memory.total --format=csv,noheader,nounits)
@@ -16,8 +16,8 @@ while true; do
   if [[ -n $free_gpu_arr ]]; then
     IFS="/" free_gpu="${free_gpu_arr[*]}"
     echo "Free GPU found: $free_gpu"
-    # nohup ./trainScript_roberta_QQP.sh $free_gpu > /dev/null 2>&1 &
-    nohup ./trainScript_macbert_LCQMC.sh $free_gpu > /dev/null 2>&1 &
+    nohup ./trainScript_roberta_QQP.sh $free_gpu > /dev/null 2>&1 &
+    # nohup ./trainScript_macbert_LCQMC.sh $free_gpu > /dev/null 2>&1 &
     break
   else
     echo "No free GPU available"
