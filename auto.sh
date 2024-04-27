@@ -7,7 +7,7 @@ while true; do
   gpu_info=$(nvidia-smi --query-gpu=index,memory.used,memory.total --format=csv,noheader,nounits)
   free_gpu_arr=()
   while IFS=',' read -r idx used total; do
-    echo $used
+    # echo $used
     if (( used < 5000 )) && [[ ! " ${except_cuda[@]} " =~ " $idx " ]]; then  # 将条件改为判断显存小于1000M
       free_gpu_arr+=($idx)
     fi
