@@ -1,6 +1,9 @@
 #!/bin/bash
 # A100: 192.168.126.81
 # nohup ./trainScript_macbert_LCQMC.sh > /dev/null 2>&1 &
+# nohup autocuda.sh -e 0 -bo /dev/null "nohup ./trainScript_macbert_LCQMC.sh" > autocuda.log 2>&1 &
+# nohup waitstart.sh -p 735075 "nohup ./trainScript_macbert_LCQMC.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
+# nohup waitstart.sh -n trainScript_macbert_LCQMC "nohup ./trainScript_macbert_LCQMC.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
 
 if [ -z "$1" ]; then
   CUDA_VISIBLE_DEVICES=3
@@ -30,11 +33,12 @@ seeds=(16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 39 40)
 seeds=(24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40)
 
 seeds=(42 109 38 62 54)
-
-
-seeds=(20 13 1 15 3 18 17 4 19 23 22 21 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 39 40)
+seeds=(20 13 1 15 3 18 17 4 19 23 22 21 16 24 25 26 27 28 29 30 31 32 33 34 35 36 37 39 40)
 learning_rates=('2e-5')
 # learning_rates=('2e-5' '4e-5' '5e-5')
+
+learning_rate=('1e-5')
+seeds=(42 109 38 62 54 20 13 1 15 3 18 17 4 19 23 22 21 16 24 25 26 27 28 29 30 31 32 33 34 35 36 37 39 40)
 
 # 遍历所有的种子
 for seed in ${seeds[@]}
