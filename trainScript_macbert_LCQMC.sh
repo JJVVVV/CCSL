@@ -1,6 +1,9 @@
 #!/bin/bash
 # A100: 192.168.126.81
 # nohup ./trainScript_macbert_LCQMC.sh > /dev/null 2>&1 &
+# nohup autocuda.sh -e 0 -bo /dev/null "nohup ./trainScript_macbert_LCQMC.sh" > autocuda.log 2>&1 &
+# nohup waitstart.sh -p 735075 "nohup ./trainScript_macbert_LCQMC.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
+# nohup waitstart.sh -n trainScript_macbert_LCQMC "nohup ./trainScript_macbert_LCQMC.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
 
 if [ -z "$1" ]; then
   CUDA_VISIBLE_DEVICES=3

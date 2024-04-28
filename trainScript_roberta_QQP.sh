@@ -24,12 +24,13 @@ declare -A pid_cuda
 
 seeds=(52 78 44 2 22)
 # seeds=(52 78 44 2 22 5 6 7 8 9 10 12 15 17 18 19 20 21 23 25 26 27 28 29 30 31 32 33 34 35)
+# seeds=(2 22 5 6 7 8 9 10 12 15 17 18 19 20 21 23 25 26 27 28 29 30 31 32 33 34 35)
 
 
 model_names=("Baseline_nodrop_baseline")
 # model_names=("Baseline_nodrop_baseline_lossx4")
 model_names=("TWR_nodrop_single_model")
-learning_rates=('2e-5' '1e-5' '4e-5')
+learning_rates=('5e-5')
 
 
 auxloss_warmup_steps=1
