@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # nohup ./trainScript_macbert_BQ.sh > /dev/null 2>&1 &
-# nohup autocuda.sh -bo /dev/null "nohup ./trainScript_macbert_BQ.sh" > autocuda.log 2>&1 &
+# nohup autocuda.sh -e 0 -bo /dev/null "nohup ./trainScript_macbert_BQ.sh" > autocuda.log 2>&1 &
+# nohup waitstart.sh -p 735075 "nohup ./trainScript_macbert_BQ.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
+# nohup waitstart.sh -n trainScript_macbert_BQ "nohup ./trainScript_macbert_BQ.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
 
 if [ -z "$1" ]; then
   CUDA_VISIBLE_DEVICES=1
@@ -38,7 +40,7 @@ seeds=(13 6 46 3 51 47 18 2 14 48 50 17 24 12 5 55 15 19 21 8 22 25 23 7 16 20 1
 
 learning_rates=('2e-5')
 
-seeds=(68 149 109 97 43 13 6 46 3 51 47 18 2 14 48 50 17 24 12 5 55 15 19 21 8 22 25 23 7 16 20 11)
+seeds=(6 46 3 51 47 18 2 14 48 50 17 24 12 5 55 15 19 21 8 22 25 23 7 16 20 11)
 learning_rates=('1e-5')
 # learning_rates=('2e-5' '4e-5' '5e-5')
 
