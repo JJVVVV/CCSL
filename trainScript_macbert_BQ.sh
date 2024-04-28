@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # nohup ./trainScript_macbert_BQ.sh > /dev/null 2>&1 &
+# nohup autocuda.sh -bo /dev/null "nohup ./trainScript_macbert_BQ.sh" > autocuda.log 2>&1 &
 
 if [ -z "$1" ]; then
   CUDA_VISIBLE_DEVICES=1
@@ -36,6 +37,9 @@ seeds=(27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 44 45 61 62 63 64 65 66 6
 seeds=(13 6 46 3 51 47 18 2 14 48 50 17 24 12 5 55 15 19 21 8 22 25 23 7 16 20 11)
 
 learning_rates=('2e-5')
+
+seeds=(68 149 109 97 43 13 6 46 3 51 47 18 2 14 48 50 17 24 12 5 55 15 19 21 8 22 25 23 7 16 20 11)
+learning_rates=('1e-5')
 # learning_rates=('2e-5' '4e-5' '5e-5')
 
 # 遍历所有的种子
