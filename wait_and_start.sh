@@ -4,7 +4,7 @@
 
 
 
-while [[ -n $(pgrep -f trainScript_macbert_LCQMC) ]]; do
+while [[ -n $(pgrep -f trainScript_macbert_BQ) ]]; do
     echo waiting
     sleep 10
 done
@@ -24,7 +24,7 @@ done
 # nohup ./trainScript_roberta_QQP_contrast_only.sh > /dev/null 2>&1 &
 # nohup ./trainScript_roberta_QQP_only_TIWR-H.sh > /dev/null 2>&1 &
 # nohup ./trainScript_bert_BQ_only_TIWR-H.sh > /dev/null 2>&1 &
-nohup ./trainScript_macbert_LCQMC.sh > /dev/null 2>&1 &
+nohup ./trainScript_macbert_BQ.sh > /dev/null 2>&1 &
 
 
 
