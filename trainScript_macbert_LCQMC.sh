@@ -31,8 +31,10 @@ seeds=(24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40)
 
 seeds=(42 109 38 62 54)
 
-learning_rates=('3e-5')
-learning_rates=('2e-5' '4e-5' '5e-5')
+
+seeds=(20 13 1 15 3 18 17 4 19 23 22 21 16)
+learning_rates=('2e-5')
+# learning_rates=('2e-5' '4e-5' '5e-5')
 
 # 遍历所有的种子
 for seed in ${seeds[@]}
