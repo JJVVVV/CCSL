@@ -42,6 +42,8 @@ learning_rates=('2e-5')
 
 # learning_rates=('2e-5' '4e-5' '5e-5')
 
+seeds=(43 118 149 107 12)
+
 # 遍历所有的种子
 for seed in ${seeds[@]}
 do
@@ -55,7 +57,7 @@ do
     part="all"
 
     text_type='ORI'
-    text_type='DATA_AUG_REP4'
+    # text_type='DATA_AUG_REP4'
 
     # text_type='JUST_DATA_AUG_ORI'
 
@@ -71,7 +73,7 @@ do
 
 
     model_name='Baseline_nodrop_baseline'
-    model_name="TWR_nodrop_single_model"
+    # model_name="TWR_nodrop_single_model"
 
 
     auxloss_warmup_steps=3

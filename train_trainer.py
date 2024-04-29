@@ -24,9 +24,21 @@ from toolkit.training.initializer import allocate_gpu_memory, initialize
 from torch.distributed.elastic.multiprocessing.errors import record
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.tensorboard import SummaryWriter
-from transformers import AutoConfig, AutoTokenizer, PreTrainedModel, PreTrainedTokenizer, PreTrainedTokenizerFast
+from transformers import (
+    AutoConfig,
+    AutoTokenizer,
+    PreTrainedModel,
+    PreTrainedTokenizer,
+    PreTrainedTokenizerFast,
+)
 
-from load_data_fns import DATASET_CLASSNUM_MAP, LOAD_DATA_FNS, DatasetName, TextType, key_map
+from load_data_fns import (
+    DATASET_CLASSNUM_MAP,
+    LOAD_DATA_FNS,
+    DatasetName,
+    TextType,
+    key_map,
+)
 from model.MatchModel_binary_classification import (  # BertModelFirst,; RobertaModel_4times_4classifier_bi,; RobertaModel_6times_bi,; BertModel_rephrase_IWR,; RobertaModel_rephrase_IWR,
     BertModel_binary_classify,
     BertModel_rephrase,
@@ -50,7 +62,10 @@ from model.MatchModel_binary_classification import (  # BertModelFirst,; Roberta
     RobertaMultiModel_rephrase_share_classifier,
     RobertaMultiModel_rephrase_withfused,
 )
-from model.MatchModel_multi_classification import BertModel_multi_classify, RobertaModel_multi_classify
+from model.MatchModel_multi_classification import (
+    BertModel_multi_classify,
+    RobertaModel_multi_classify,
+)
 from utils.evaluate import Evaluator1
 
 
@@ -774,9 +789,13 @@ if __name__ == "__main__":
                         )
                     else:
                         if "TWR" in configs.model_name:
-                            stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/3e-05")
+                            stage1_model_dir = Path(
+                                f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/{'2e-05' if 'macbert' in configs.model_type else '3e-05'}"
+                            )
                         else:
-                            stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
+                            stage1_model_dir = Path(
+                                f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/{'2e-05' if 'macbert' in configs.model_type else '3e-05'}"
+                            )
                 else:
                     stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
@@ -817,23 +836,31 @@ if __name__ == "__main__":
             if "single" in configs.model_name or "baseline" in configs.model_name or "s2m" in configs.model_name:
                 if "nodrop" in configs.model_name:
                     if "auxloss" in configs.model_name:
-                        stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/nodrop_single_model_auxloss=logits/3/16/3e-05")
+                        stage1_model_dir = Path(
+                            f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/nodrop_single_model_auxloss=logits/3/16/3e-05"
+                        )
                     elif "after_contrast_margin=1" in configs.model_name:
                         stage1_model_dir = Path(
-                            "outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin=1/3/16/3e-05"
+                            f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin=1/3/16/3e-05"
                         )
                     else:
                         if "TWR" in configs.model_name:
-                            stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/3e-05")
+                            stage1_model_dir = Path(
+                                f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/{'2e-05' if 'macbert' in configs.model_type else '3e-05'}"
+                            )
                         else:
-                            stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
+                            stage1_model_dir = Path(
+                                f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05"
+                            )
                 else:
-                    stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/single_model/3/16/3e-05")
+                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
                 if "shareclassifier" in configs.model_name:
-                    stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/multi_model_shareclassifier/3/16/3e-05")
+                    stage1_model_dir = Path(
+                        f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model_shareclassifier/3/16/3e-05"
+                    )
                 else:
-                    stage1_model_dir = Path("outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
+                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "mismatch" in configs.model_name:
                 seeds_of_stage1: list = list(map(int, configs.seeds_of_stage1.split()))
@@ -858,9 +885,13 @@ if __name__ == "__main__":
                         stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin=1/3/16/3e-05")
                     else:
                         if "TWR" in configs.model_name:
-                            stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/3e-05")
+                            stage1_model_dir = Path(
+                                f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/3e-05"
+                            )
                         else:
-                            stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05")
+                            stage1_model_dir = Path(
+                                f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05"
+                            )
                 else:
                     stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
@@ -890,9 +921,13 @@ if __name__ == "__main__":
             if "single" in configs.model_name or "baseline" in configs.model_name or "s2m" in configs.model_name:
                 if "nodrop" in configs.model_name:
                     if "TWR" in configs.model_name:
-                        stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/2e-05")
+                        stage1_model_dir = Path(
+                            f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/2e-05"
+                        )
                     else:
-                        stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/2e-05")
+                        stage1_model_dir = Path(
+                            f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/2e-05"
+                        )
                 else:
                     stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/single_model/3/16/2e-05")
             elif "multi" in configs.model_name:
