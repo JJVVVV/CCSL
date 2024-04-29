@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # nohup ./trainScript_macbert_LCQMC_only_TIWR-H.sh > /dev/null 2>&1 &
+# nohup autocuda.sh -e 5 -bo /dev/null "nohup ./trainScript_macbert_LCQMC_only_TIWR-H.sh" > autocuda.log 2>&1 &
 # nohup waitstart.sh -n trainScript_macbert_LCQMC "nohup ./trainScript_macbert_LCQMC_only_TIWR-H.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
 
 
@@ -23,7 +24,8 @@ declare -A pid_cuda
 
 
 all_times=(0.8 0.2 0.4 0.6 1)
-seeds_of_stage1=(29 42 38 35 54)
+seeds_of_stage1=(29 42 38 54 1)
+# 35
 seeds=(29 42 38 35 54 62 44 11 2 5 6 7 8 9 10 12 15 17 18 19 20 21 22 23 25 26 27 28 29 30 31 32 33 34)
 # seeds=(29 42 38 54 1 2 3 4)
 
