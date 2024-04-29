@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# nohup ./trainScript_bert_LCQMC_only_TIWR-H.sh > /dev/null 2>&1 &
-# nohup waitstart.sh -n trainScript_macbert_LCQMC "nohup ./trainScript_bert_LCQMC_only_TIWR-H.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
+# nohup ./trainScript_macbert_LCQMC_only_TIWR-H.sh > /dev/null 2>&1 &
+# nohup waitstart.sh -n trainScript_macbert_LCQMC "nohup ./trainScript_macbert_LCQMC_only_TIWR-H.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
 
 
 CUDA_VISIBLE_DEVICES=3
