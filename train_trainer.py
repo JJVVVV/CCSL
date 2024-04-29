@@ -81,8 +81,8 @@ def get_contro_confused_definite_cases(split="TEST"):
     if not results_dir.exists():
         if split == "TRAINING":
             # split = "train"
-            # model_path = f"outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/single_model/5/16/2e-05/{seed}/optimal_checkpoint"
-            # model_path = "outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/multi_model/5/16/2e-05/4/optimal_checkpoint"
+            # model_path = f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model/5/16/2e-05/{seed}/optimal_checkpoint"
+            # model_path = f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model/5/16/2e-05/4/optimal_checkpoint"
             model_infer_hardcases = baseline_model_dir if "hardcases_from_baseline" in configs.model_name else stage1_model_dir
             model_path = str(model_infer_hardcases / str(seed_of_stage1) / "optimal_checkpoint")
             # model_type = model_path.split("/")[2]
@@ -781,11 +781,11 @@ if __name__ == "__main__":
                     if "after_contrast" in configs.model_name:  # stage2
                         margin = re.search(r"margin=([\d\.]*)", configs.model_name).group(1)
                         stage1_model_dir = Path(
-                            f"outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin={margin}/3/16/3e-05"
+                            f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin={margin}/3/16/3e-05"
                         )
                     elif "auxloss=kl" in configs.model_name:
                         stage1_model_dir = Path(
-                            "outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/nodrop_single_model_auxloss=kl_warmupepoch=1/3/16/3e-05"
+                            f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/nodrop_single_model_auxloss=kl_warmupepoch=1/3/16/3e-05"
                         )
                     else:
                         if "TWR" in configs.model_name:
@@ -794,42 +794,50 @@ if __name__ == "__main__":
                             )
                         else:
                             stage1_model_dir = Path(
-                                f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/{'2e-05' if 'macbert' in configs.model_type else '3e-05'}"
+                                f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05"
                             )
                 else:
-                    stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/single_model/3/16/3e-05")
+                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
                 if "shareclassifier" in configs.model_name:
-                    stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/multi_model_shareclassifier/3/16/3e-05")
+                    stage1_model_dir = Path(
+                        f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model_shareclassifier/3/16/3e-05"
+                    )
                 else:
-                    stage1_model_dir = Path("outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
+                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "mismatch" in configs.model_name:
                 seeds_of_stage1: list = list(map(int, configs.seeds_of_stage1.split()))
                 seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1) + 1) % len(seeds_of_stage1)]
                 configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
-                baseline_model_dir = Path("outputs/LCQMC/bert-base-chinese/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
+                baseline_model_dir = Path(
+                    f"outputs/{configs.dataset_name}/{configs.model_type}/ORI/all/Baseline_nodrop_baseline/3/16/{'2e-05' if 'macbert' in configs.model_type else '3e-05'}"
+                )
             else:
-                baseline_model_dir = Path("outputs/LCQMC/bert-base-chinese/ORI/all/baseline/3/16/3e-05")
+                baseline_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/ORI/all/baseline/3/16/3e-05")
         elif "after_contrast" in configs.model_name:  # stage1
             margin = re.search(r"margin=([\d\.]*)", configs.model_name).group(1)
             if "multi" in configs.model_name:
                 configs.model_dir = (
-                    Path(f"outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/multi_model_shareclassifier_contrast_only_margin={margin}/1/16/1e-05")
+                    Path(
+                        f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model_shareclassifier_contrast_only_margin={margin}/1/16/1e-05"
+                    )
                     / "29"
                     / "optimal_checkpoint"
                 )
             else:
                 # contrast_only_margin
                 configs.model_dir = (
-                    Path(f"outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/single_model_contrast_only2_margin={margin}/1/16/3e-05")
+                    Path(
+                        f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model_contrast_only2_margin={margin}/1/16/3e-05"
+                    )
                     / "29"
                     / "optimal_checkpoint"
                 )
         # elif "auxloss_sep" in configs.model_name and configs.auxloss == False:
         #     configs.model_dir = (
-        #         Path(f"outputs/LCQMC/bert-base-chinese/DATA_AUG_REP4/all/single_model_auxloss_sep=True/1/16/1e-05") / "29" / "optimal_checkpoint"
+        #         Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model_auxloss_sep=True/1/16/1e-05") / "29" / "optimal_checkpoint"
         #     )
     elif configs.dataset_name == "BQ":
         if "warmboost" in configs.model_name:
@@ -867,13 +875,15 @@ if __name__ == "__main__":
                 seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1) + 1) % len(seeds_of_stage1)]
                 configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
-                baseline_model_dir = Path("outputs/BQ/bert-base-chinese/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
+                baseline_model_dir = Path(
+                    f"outputs/{configs.dataset_name}/{configs.model_type}/ORI/all/Baseline_nodrop_baseline/3/16/{'2e-05' if 'macbert' in configs.model_type else '3e-05'}"
+                )
             else:
-                baseline_model_dir = Path("outputs/BQ/bert-base-chinese/ORI/all/baseline/3/16/3e-05")
+                baseline_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/ORI/all/baseline/3/16/3e-05")
         elif "after_contrast" in configs.model_name:
             margin = re.search(r"margin=([\d\.]*)", configs.model_name).group(1)
             configs.model_dir = (
-                Path(f"outputs/BQ/bert-base-chinese/DATA_AUG_REP4/all/single_model_contrast_only_margin={margin}/1/16/3e-05")
+                Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model_contrast_only_margin={margin}/1/16/3e-05")
                 / "149"
                 / "optimal_checkpoint"
             )
@@ -908,9 +918,9 @@ if __name__ == "__main__":
                 # exit(1)
                 configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
-                baseline_model_dir = Path("outputs/QQP/roberta-base/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
+                baseline_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/ORI/all/Baseline_nodrop_baseline/3/16/3e-05")
             else:
-                baseline_model_dir = Path("outputs/QQP/roberta-base/ORI/all/baseline/3/16/3e-05")
+                baseline_model_dir = Path(f"outputs{configs.dataset_name}/{configs.model_type}/ORI/all/baseline/3/16/3e-05")
         elif "after_contrast" in configs.model_name:
             margin = re.search(r"margin=([\d\.]*)", configs.model_name).group(1)
             configs.model_dir = (
@@ -941,9 +951,9 @@ if __name__ == "__main__":
                 seed = seeds_of_stage1[(seeds_of_stage1.index(configs.seed_of_stage1) + 1) % len(seeds_of_stage1)]
                 configs.model_dir = stage1_model_dir / str(seed) / "optimal_checkpoint"
             if "nodrop" in configs.model_name:
-                baseline_model_dir = Path("outputs/MRPC/roberta-base/ORI/all/Baseline_nodrop_baseline/3/16/2e-05")
+                baseline_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/ORI/all/Baseline_nodrop_baseline/3/16/2e-05")
             else:
-                baseline_model_dir = Path("outputs/MRPC/roberta-base/ORI/all/baseline/3/16/2e-05")
+                baseline_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/ORI/all/baseline/3/16/2e-05")
     print(configs.shuffle)
     # * Create checkpoints,tensorboard outputs directory
     _dir = Path(

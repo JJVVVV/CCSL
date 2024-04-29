@@ -1,10 +1,15 @@
 #!/bin/bash
 
 # nohup ./trainScript_macbert_BQ_only_TIWR-H.sh > /dev/null 2>&1 &
+# nohup autocuda.sh -bo /dev/null "nohup ./trainScript_macbert_BQ_only_TIWR-H.sh" > autocuda.log 2>&1 &
 # nohup waitstart.sh -n trainScript_macbert_BQ "nohup ./trainScript_macbert_BQ_only_TIWR-H.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
 
-CUDA_VISIBLE_DEVICES=1
-# CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
+if [ -z "$1" ]; then
+  CUDA_VISIBLE_DEVICES=1
+else
+  CUDA_VISIBLE_DEVICES=$1
+fi
+
 
 # 定义一个数组，存放可用cuda
 # IFS=',' cudas=($CUDA_VISIBLE_DEVICES) IFS=' '
