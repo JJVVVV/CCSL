@@ -1,12 +1,11 @@
 #!/bin/bash
 
-# nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
+# nohup ./trainScript_bert_LCQMC_only_TIWR-H.sh > /dev/null 2>&1 &
+# nohup waitstart.sh -n trainScript_macbert_LCQMC "nohup ./trainScript_bert_LCQMC_only_TIWR-H.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
 
-if [ -z "$1" ]; then
-  CUDA_VISIBLE_DEVICES=5
-else
-  CUDA_VISIBLE_DEVICES=$1
-fi
+
+CUDA_VISIBLE_DEVICES=3
+# CUDA_VISIBLE_DEVICES=0/1/2/3/4/5/6/7
 
 # 定义一个数组，存放可用cuda
 # IFS=',' cudas=($CUDA_VISIBLE_DEVICES) IFS=' '
@@ -22,71 +21,60 @@ pids=()
 declare -A pid_cuda
 
 
-seeds=(52 78 44 2 22)
-# seeds=(52 78 44 2 22 5 6 7 8 9 10 12 15 17 18 19 20 21 23 25 26 27 28 29 30 31 32 33 34 35)
-seeds=(6 7 8 9 10 12 15 17 18 19 20 21 23 25 26 27 28 29 30 31 32 33 34 35)
 
+all_times=(0.8 0.2 0.4 0.6 1)
+seeds_of_stage1=(29 42 38 35 54)
+seeds=(29 42 38 35 54 62 44 11 2 5 6 7 8 9 10 12 15 17 18 19 20 21 22 23 25 26 27 28 29 30 31 32 33 34)
+# seeds=(29 42 38 54 1 2 3 4)
 
-model_names=("Baseline_nodrop_baseline")
-# model_names=("Baseline_nodrop_baseline_lossx4")
-model_names=("TWR_nodrop_single_model")
-learning_rates=('3e-5')
-
-
-auxloss_warmup_steps=1
-# model_names=("nodrop_single_model_auxloss=kl_warmupepoch=$auxloss_warmup_steps")
-# model_names=("multi_model_shareclassifier")
-
-
-
-# 遍历所有的种子
-for seed in ${seeds[@]}
+for times in ${all_times[@]}
 do
-  for model_name in ${model_names[@]}
+  # 遍历所有的种子
+  for seed in ${seeds[@]}
   do
-    for learning_rate in "${learning_rates[@]}"
+    for seed_of_stage1 in ${seeds_of_stage1[@]}
     do
       # ###################################parameters#########################################
       model_structure="encoder"
       task_type="classify"
       dashboard="None"
-      dataset_name="QQP"
+      dataset_name="LCQMC"
       part="all"
-      text_type='ORI'
+      # text_type='ORI'
       text_type='DATA_AUG_REP4'
-      # text_type='JUST_DATA_AUG_REP4'
-      # text_type='JUST_DATA_AUG_ORI'
-
-      # text_type='DATA_AUG_REP4_FUSED'
-      # text_type='JUST_DATA_AUG6'
 
       min_threshold=None
       alpha=None
 
-      # model_type="bert-base-uncased"
-      model_type="roberta-base"
+      model_type="bert-base-chinese"
+      model_type="chinese-macbert-base"
 
-      model_dir="../../pretrained/$model_type"
+      model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}_record_pipline/seed_of_stage1=$seed_of_stage1"
+      # model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
+
+
+      model_dir="../pretrained/$model_type"
+      # model_dir="../../pretrained_models/$model_type"
+
       fp16=True
       test_in_epoch=True
 
       accumulate_step=1
-      if [[ $text_type == "JUST_DATA_AUG"* ]]; then
-        batch_size=64
-        # batch_size=16
-      else
-        batch_size=16
-      fi
+      batch_size=16
       batch_size_infer=64
-      epochs=3
+      epochs=1
       max_length_input=512
-      # learning_rate='3e-5'
-      weight_decay=0.1
+      learning_rate='2e-6'
+      weight_decay=0.01
       metric='accuracy'
 
+      # train_file_path="data/LCQMC/train/qwen_with_rephrase_clean_hardcases.jsonl"
       if [[ $model_name == *"nodrop"* ]]; then
         train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_nodrop.jsonl"
         val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean_nodrop.jsonl"
+        test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean_nodrop.jsonl"
       else
         if [[ $model_name == *"correct"* ]]; then
           train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_correct.jsonl"
@@ -94,16 +82,10 @@ do
           train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean.jsonl"
         fi
         val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean.jsonl"
+        test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean.jsonl"
       fi
-      test_file_path=None
-
-      # train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_hardcases.jsonl"
-      # val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean_hardcases.jsonl"
-      # test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean_hardcases.jsonl"
-
       warmup_ratio=0.1
       # ###################################parameters#########################################
-
       # 判断有无console目录, 没有则创建
       log_file="console/$dataset_name-$text_type-$model_type-$model_name-$epochs-$batch_size-$learning_rate-$seed.ansi.log"
       log_dir=${log_file%/*}
@@ -173,11 +155,12 @@ do
             --part $part \
             --model_dir $model_dir \
             --parallel_mode DDP \
-            --save_ckpts False \
             --save_last_ckpt False \
             --show_lr False \
             --show_step False \
             --cache_dataset True \
+            --seed_of_stage1 $seed_of_stage1 \
+            --times $times \
             --record_cheat False \
             --model_structure $model_structure \
             --task_type $task_type \
@@ -209,12 +192,13 @@ do
           --alpha $alpha \
           --part $part \
           --model_dir $model_dir \
-          --save_ckpts False \
           --save_last_ckpt False \
           --logging_steps 1 \
           --show_lr False \
           --show_step False \
           --cache_dataset True \
+          --seed_of_stage1 $seed_of_stage1 \
+          --times $times \
           --auxloss_warmup_steps $auxloss_warmup_steps \
           --record_cheat False \
           --model_structure $model_structure \
@@ -248,5 +232,7 @@ do
     done
   done
 done
-  # 等待所有剩余的进程结束
-  wait ${pids[@]}
+
+# 等待所有剩余的进程结束
+wait ${pids[@]}
+
