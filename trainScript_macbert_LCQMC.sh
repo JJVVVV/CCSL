@@ -37,8 +37,12 @@ seeds=(20 13 1 15 3 18 17 4 19 23 22 21 16 24 25 26 27 28 29 30 31 32 33 34 35 3
 learning_rates=('2e-5')
 # learning_rates=('2e-5' '4e-5' '5e-5')
 
-learning_rate=('1e-5')
-seeds=(42 109 38 62 54 20 13 1 15 3 18 17 4 19 23 22 21 16 24 25 26 27 28 29 30 31 32 33 34 35 36 37 39 40)
+# learning_rate=('1e-5')
+# seeds=(42 109 38 62 54 20 13 1 15 3 18 17 4 19 23 22 21 16 24 25 26 27 28 29 30 31 32 33 34 35 36 37 39 40)
+
+
+# seeds=(29 42 38 54 1)
+seeds=(35)
 
 # 遍历所有的种子
 for seed in ${seeds[@]}
@@ -52,7 +56,7 @@ do
     dataset_name="LCQMC"
     part="all"
     text_type='ORI'
-    text_type='DATA_AUG_REP4'
+    # text_type='DATA_AUG_REP4'
     # text_type='JUST_DATA_AUG_ORI'
 
     min_threshold=None
@@ -67,7 +71,7 @@ do
 
 
     model_name='Baseline_nodrop_baseline'
-    model_name="TWR_nodrop_single_model"
+    # model_name="TWR_nodrop_single_model"
     
     auxloss_warmup_steps=3
     # model_name="nodrop_single_model_auxloss=logits_warmupepoch=$auxloss_warmup_steps"
