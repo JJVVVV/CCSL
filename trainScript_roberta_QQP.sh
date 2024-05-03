@@ -3,7 +3,7 @@
 # nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
 
 if [ -z "$1" ]; then
-  CUDA_VISIBLE_DEVICES=5
+  CUDA_VISIBLE_DEVICES=1/3/5
 else
   CUDA_VISIBLE_DEVICES=$1
 fi
@@ -25,11 +25,11 @@ declare -A pid_cuda
 seeds=(52 78 44 2 22)
 # seeds=(52 78 44 2 22 5 6 7 8 9 10 12 15 17 18 19 20 21 23 25 26 27 28 29 30 31 32 33 34 35)
 seeds=(6 7 8 9 10 12 15 17 18 19 20 21 23 25 26 27 28 29 30 31 32 33 34 35)
-
+seeds=(33 18 78 31 23 0)
 
 model_names=("Baseline_nodrop_baseline")
 # model_names=("Baseline_nodrop_baseline_lossx4")
-model_names=("TWR_nodrop_single_model")
+# model_names=("TWR_nodrop_single_model")
 learning_rates=('3e-5')
 
 
@@ -53,7 +53,7 @@ do
       dataset_name="QQP"
       part="all"
       text_type='ORI'
-      text_type='DATA_AUG_REP4'
+      # text_type='DATA_AUG_REP4'
       # text_type='JUST_DATA_AUG_REP4'
       # text_type='JUST_DATA_AUG_ORI'
 
