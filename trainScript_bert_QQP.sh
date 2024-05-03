@@ -2,7 +2,7 @@
 
 # nohup ./trainScript_bert_QQP.sh > /dev/null 2>&1 &
 
-CUDA_VISIBLE_DEVICES=0/1
+CUDA_VISIBLE_DEVICES=1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
 # CUDA_VISIBLE_DEVICES=5/6/7
 
