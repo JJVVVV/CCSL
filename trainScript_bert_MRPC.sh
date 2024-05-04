@@ -1,13 +1,22 @@
 #!/bin/bash
 
 # nohup ./trainScript_bert_MRPC.sh > /dev/null 2>&1 &
+# nohup waitstart.sh -n trainScript_roberta_QQP "nohup ./trainScript_bert_MRPC.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
+
+
+if [ -z "$1" ]; then
+  CUDA_VISIBLE_DEVICES=1/3
+else
+  CUDA_VISIBLE_DEVICES=$1
+fi
 
 
 seeds=(59 13 43 71 56)
 # seeds=(67 131 103 53 107)
 
-CUDA_VISIBLE_DEVICES=1
-# CUDA_VISIBLE_DEVICES=5/6/7
+
+seeds=(59 13 43 71 56 30 31 32 33 34 35 36 37 38 39 40 41 42 44 45 46 47 48 49 50 51 52 53 54 55 57 58 60)
+
 
 # ###################################parameters#########################################
 model_structure="encoder"
@@ -27,7 +36,7 @@ model_dir="../../pretrained/$model_type"
 
 
 model_name="Baseline_nodrop_baseline"
-model_name="TIWR_nodrop_single_model"
+model_name="TWR_nodrop_single_model"
 
 
 fp16=True
@@ -44,8 +53,9 @@ batch_size_infer=64
 epochs=3
 max_length_input=512
 learning_rate='2e-5'
-weight_decay=0.1
+weight_decay=0.01
 metric='accuracy'
+warmup_ratio=0.1
 
 if [[ $model_name == *"nodrop"* ]]; then
   train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_nodrop.jsonl"
@@ -61,7 +71,6 @@ else
   test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean.jsonl"
 fi
 
-warmup_ratio=0.1
 # ###################################parameters#########################################
 
 # 定义一个数组，存放可用cuda
