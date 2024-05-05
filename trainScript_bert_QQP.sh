@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# nohup ./trainScript_bert_QQP.sh > /dev/null 2>&1 &
+# c
 
 CUDA_VISIBLE_DEVICES=1
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
@@ -22,10 +22,11 @@ declare -A pid_cuda
 
 seeds=(52 78 44 2 22 33 18 31 23 0 1 3 4 5 6 7 8 9 10 11)
 
+seeds=(31 10 9 0)
 
 model_names=("Baseline_nodrop_baseline")
 # model_names=("Baseline_nodrop_baseline_lossx4")
-model_names=("TWR_nodrop_single_model")
+# model_names=("TWR_nodrop_single_model")
 
 auxloss_warmup_steps=1
 # model_names=("nodrop_single_model_auxloss=kl_warmupepoch=$auxloss_warmup_steps")
@@ -45,7 +46,7 @@ do
     dataset_name="QQP"
     part="all"
     text_type='ORI'
-    text_type='DATA_AUG_REP4'
+    # text_type='DATA_AUG_REP4'
     # text_type='JUST_DATA_AUG_REP4'
     # text_type='JUST_DATA_AUG_ORI'
 

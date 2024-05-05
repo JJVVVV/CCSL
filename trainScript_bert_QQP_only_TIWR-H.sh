@@ -5,7 +5,7 @@
 # nohup waitstart.sh -n trainScript_bert_QQP "nohup ./trainScript_bert_QQP_only_TIWR-H.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
 
 if [ -z "$1" ]; then
-  CUDA_VISIBLE_DEVICES=1/3/5
+  CUDA_VISIBLE_DEVICES=1
 else
   CUDA_VISIBLE_DEVICES=$1
 fi
