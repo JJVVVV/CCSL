@@ -2,7 +2,7 @@
 
 # nohup ./trainScript_bert_MRPC.sh > /dev/null 2>&1 &
 # nohup waitstart.sh -n trainScript_roberta_QQP "nohup ./trainScript_bert_MRPC.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
-
+# nohup autocuda.sh -bo /dev/null "nohup ./trainScript_bert_MRPC.sh" > autocuda.log 2>&1 &
 
 if [ -z "$1" ]; then
   CUDA_VISIBLE_DEVICES=1/3
@@ -11,8 +11,7 @@ else
 fi
 
 
-seeds=(59 13 43 71 56)
-# seeds=(67 131 103 53 107)
+seeds=(35 37 44 53 57)
 
 
 seeds=(59 13 43 71 56 30 31 32 33 34 35 36 37 38 39 40 41 42 44 45 46 47 48 49 50 51 52 53 54 55 57 58 60)
@@ -25,7 +24,7 @@ dashboard="None"
 dataset_name="MRPC"
 part="all"
 text_type='ORI'
-text_type='DATA_AUG_REP4'
+# text_type='DATA_AUG_REP4'
 # text_type='JUST_DATA_AUG_ORI'
 
 min_threshold=None
@@ -36,7 +35,7 @@ model_dir="../../pretrained/$model_type"
 
 
 model_name="Baseline_nodrop_baseline"
-model_name="TWR_nodrop_single_model"
+# model_name="TWR_nodrop_single_model"
 
 
 fp16=True

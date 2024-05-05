@@ -892,7 +892,7 @@ if __name__ == "__main__":
             if "single" in configs.model_name or "baseline" in configs.model_name or "s2m" in configs.model_name:
                 if "nodrop" in configs.model_name:
                     if "after_contrast_margin=1" in configs.model_name:
-                        stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin=1/3/16/3e-05")
+                        stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/nodrop_single_model_after_contrast_margin=1/3/16/3e-05")
                     else:
                         if "TWR" in configs.model_name:
                             stage1_model_dir = Path(
@@ -903,12 +903,12 @@ if __name__ == "__main__":
                                 f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/3e-05"
                             )
                 else:
-                    stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/single_model/3/16/3e-05")
+                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model/3/16/3e-05")
             elif "multi" in configs.model_name:
                 if "shareclassifier" in configs.model_name:
-                    stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/multi_model_shareclassifier/3/16/3e-05")
+                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model_shareclassifier/3/16/3e-05")
                 else:
-                    stage1_model_dir = Path("outputs/QQP/roberta-base/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
+                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model/3/16/3e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "mismatch" in configs.model_name:
                 # TODO
@@ -924,7 +924,7 @@ if __name__ == "__main__":
         elif "after_contrast" in configs.model_name:
             margin = re.search(r"margin=([\d\.]*)", configs.model_name).group(1)
             configs.model_dir = (
-                Path(f"outputs/QQP/roberta-base/DATA_AUG_REP4/all/single_model_contrast_only_margin={margin}/1/16/3e-05") / "2" / "optimal_checkpoint"
+                Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model_contrast_only_margin={margin}/1/16/3e-05") / "2" / "optimal_checkpoint"
             )
     elif configs.dataset_name == "MRPC":
         if "warmboost" in configs.model_name:
@@ -939,12 +939,12 @@ if __name__ == "__main__":
                             f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/2e-05"
                         )
                 else:
-                    stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/single_model/3/16/2e-05")
+                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model/3/16/2e-05")
             elif "multi" in configs.model_name:
                 if "shareclassifier" in configs.model_name:
-                    stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/multi_model_shareclassifier/3/16/2e-05")
+                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model_shareclassifier/3/16/2e-05")
                 else:
-                    stage1_model_dir = Path("outputs/MRPC/roberta-base/DATA_AUG_REP4/all/multi_model/3/16/2e-05")
+                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model/3/16/2e-05")
             configs.model_dir = stage1_model_dir / str(configs.seed_of_stage1) / "optimal_checkpoint"
             if "mismatch" in configs.model_name:
                 seeds_of_stage1: list = list(map(int, configs.seeds_of_stage1.split()))
