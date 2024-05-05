@@ -30,7 +30,7 @@ seeds_of_stage1=(33 18 78 31 23)
 seeds=(0 4 6 52 78 44 2 22 1 3 7 8 9 10 12 15 17 18 19 20 21 23 25 26 27 28 29 30 31 32 33 34 35)
 
 
-learning_rates=('1e-5')
+learning_rates=('2e-6')
 
 for times in ${all_times[@]}
 do
@@ -59,7 +59,7 @@ do
         model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
         # model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
         model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}_record_pipline/seed_of_stage1=$seed_of_stage1"
-        model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}_only_pos_record_pipline/seed_of_stage1=$seed_of_stage1"
+        # model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}_only_pos_record_pipline/seed_of_stage1=$seed_of_stage1"
 
         model_dir="../pretrained/$model_type"
 
