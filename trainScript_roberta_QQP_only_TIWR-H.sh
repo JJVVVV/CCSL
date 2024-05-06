@@ -25,10 +25,11 @@ declare -A pid_cuda
 
 all_times=(0.2 0.4 0.6 0.8 1)
 all_times=(0.2)
+all_times=(0.4 0.6 0.8 1)
 seeds_of_stage1=(52 78 44 2 22)
 seeds_of_stage1=(33 18 78 31 23)
 seeds=(0 4 6 52 78 44 2 22 1 3 7 8 9 10 12 15 17 18 19 20 21 23 25 26 27 28 29 30 31 32 33 34 35)
-
+seeds=(21 12 52 15 6)
 
 learning_rates=('2e-6')
 
