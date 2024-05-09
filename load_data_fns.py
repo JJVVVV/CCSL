@@ -49,6 +49,7 @@ class TextType(Enum):
     SORTED_DATA = auto()
     CHECK_HAL = auto()
     CHECK_HAL2 = auto()
+    EXTRAL_EVAL = auto()
     # ONLY_POS = auto()
 
 
@@ -133,6 +134,10 @@ def load_data_fn_qqp_lcqmc_bq_mrpc(
     for _, row in df.iterrows():
         # input
         match text_type:
+            case TextType.EXTRAL_EVAL:
+                inputs.append(PairedText(row[key1], row["rephrase2"]))
+                inputs.append(PairedText(row["rephrase1"], row[key2]))
+                inputs.append(PairedText(row["rephrase1"], row["rephrase2"]))
             case TextType.CHECK_HAL:
                 inputs.append(PairedText(row[key1], row["rephrase1"]))
                 inputs.append(PairedText(row[key2], row["rephrase2"]))
@@ -208,6 +213,8 @@ def load_data_fn_qqp_lcqmc_bq_mrpc(
             case (TextType.CHECK_HAL, _):
                 labels.append([1])
                 labels.append([1])
+            case (TextType.EXTRAL_EVAL, _):
+                labels.extend([[row["label"]] for _ in range(3)])
             case _:
                 labels.append([row["label"]])
 
