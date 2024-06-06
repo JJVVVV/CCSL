@@ -1,0 +1,372 @@
+[
+  {
+    "QQP": {
+      "C1": {
+        "Consistent": 95.0,
+        "Inconsistent": 78.3
+      },
+      "C2": {
+        "Consistent": 94.7,
+        "Inconsistent": 79.4
+      },
+      "C3": {
+        "Consistent": 94.8,
+        "Inconsistent": 79.2
+      },
+      "TDM": {
+        "Consistent": 94.9,
+        "Inconsistent": 79.1
+      }
+    },
+    "MRPC": {
+      "C1": {
+        "Consistent": 91.6,
+        "Inconsistent": 72.0
+      },
+      "C2": {
+        "Consistent": 91.9,
+        "Inconsistent": 75.9
+      },
+      "C3": {
+        "Consistent": 92.4,
+        "Inconsistent": 76.7
+      },
+      "TDM": {
+        "Consistent": 92.0,
+        "Inconsistent": 75.9
+      }
+    },
+    "LCQMC": {
+      "C1": {
+        "Consistent": 93.6,
+        "Inconsistent": 76.4
+      },
+      "C2": {
+        "Consistent": 92.8,
+        "Inconsistent": 80.1
+      },
+      "C3": {
+        "Consistent": 93.5,
+        "Inconsistent": 81.4
+      },
+      "TDM": {
+        "Consistent": 93.5,
+        "Inconsistent": 81.1
+      }
+    },
+    "BQ": {
+      "C1": {
+        "Consistent": 89.8,
+        "Inconsistent": 66.6
+      },
+      "C2": {
+        "Consistent": 90.0,
+        "Inconsistent": 71.2
+      },
+      "C3": {
+        "Consistent": 89.5,
+        "Inconsistent": 71.5
+      },
+      "TDM": {
+        "Consistent": 89.9,
+        "Inconsistent": 70.7
+      }
+    }
+  },
+  {
+    "QQP": {
+      "C1": {
+        "Consistent": 95.1,
+        "Inconsistent": 78.8
+      },
+      "C2": {
+        "Consistent": 94.7,
+        "Inconsistent": 79.8
+      },
+      "C3": {
+        "Consistent": 94.8,
+        "Inconsistent": 79.8
+      },
+      "TDM": {
+        "Consistent": 94.9,
+        "Inconsistent": 79.5
+      }
+    },
+    "MRPC": {
+      "C1": {
+        "Consistent": 90.3,
+        "Inconsistent": 72.6
+      },
+      "C2": {
+        "Consistent": 91.2,
+        "Inconsistent": 78.6
+      },
+      "C3": {
+        "Consistent": 91.4,
+        "Inconsistent": 78.6
+      },
+      "TDM": {
+        "Consistent": 91.2,
+        "Inconsistent": 78.3
+      }
+    },
+    "LCQMC": {
+      "C1": {
+        "Consistent": 93.4,
+        "Inconsistent": 70.4
+      },
+      "C2": {
+        "Consistent": 92.8,
+        "Inconsistent": 77.5
+      },
+      "C3": {
+        "Consistent": 93.3,
+        "Inconsistent": 79.5
+      },
+      "TDM": {
+        "Consistent": 93.3,
+        "Inconsistent": 79.2
+      }
+    },
+    "BQ": {
+      "C1": {
+        "Consistent": 89.8,
+        "Inconsistent": 67.8
+      },
+      "C2": {
+        "Consistent": 90.0,
+        "Inconsistent": 70.2
+      },
+      "C3": {
+        "Consistent": 89.7,
+        "Inconsistent": 71.4
+      },
+      "TDM": {
+        "Consistent": 90.1,
+        "Inconsistent": 70.8
+      }
+    }
+  },
+  {
+    "QQP": {
+      "C1": {
+        "Consistent": 95.1,
+        "Inconsistent": 78.6
+      },
+      "C2": {
+        "Consistent": 94.8,
+        "Inconsistent": 79.3
+      },
+      "C3": {
+        "Consistent": 94.8,
+        "Inconsistent": 79.1
+      },
+      "TDM": {
+        "Consistent": 94.9,
+        "Inconsistent": 79.1
+      }
+    },
+    "MRPC": {
+      "C1": {
+        "Consistent": 90.3,
+        "Inconsistent": 75.6
+      },
+      "C2": {
+        "Consistent": 91.2,
+        "Inconsistent": 77.9
+      },
+      "C3": {
+        "Consistent": 91.2,
+        "Inconsistent": 79.1
+      },
+      "TDM": {
+        "Consistent": 90.9,
+        "Inconsistent": 76.8
+      }
+    },
+    "LCQMC": {
+      "C1": {
+        "Consistent": 93.4,
+        "Inconsistent": 71.8
+      },
+      "C2": {
+        "Consistent": 92.4,
+        "Inconsistent": 78.3
+      },
+      "C3": {
+        "Consistent": 93.4,
+        "Inconsistent": 81.6
+      },
+      "TDM": {
+        "Consistent": 93.2,
+        "Inconsistent": 79.9
+      }
+    },
+    "BQ": {
+      "C1": {
+        "Consistent": 89.4,
+        "Inconsistent": 64.4
+      },
+      "C2": {
+        "Consistent": 89.6,
+        "Inconsistent": 71.0
+      },
+      "C3": {
+        "Consistent": 89.6,
+        "Inconsistent": 71.1
+      },
+      "TDM": {
+        "Consistent": 89.7,
+        "Inconsistent": 70.8
+      }
+    }
+  },
+  {
+    "QQP": {
+      "C1": {
+        "Consistent": 95.0,
+        "Inconsistent": 78.1
+      },
+      "C2": {
+        "Consistent": 94.6,
+        "Inconsistent": 79.4
+      },
+      "C3": {
+        "Consistent": 94.7,
+        "Inconsistent": 79.0
+      },
+      "TDM": {
+        "Consistent": 94.9,
+        "Inconsistent": 79.0
+      }
+    },
+    "MRPC": {
+      "C1": {
+        "Consistent": 91.7,
+        "Inconsistent": 69.3
+      },
+      "C2": {
+        "Consistent": 91.7,
+        "Inconsistent": 73.8
+      },
+      "C3": {
+        "Consistent": 91.6,
+        "Inconsistent": 74.6
+      },
+      "TDM": {
+        "Consistent": 91.4,
+        "Inconsistent": 75.1
+      }
+    },
+    "LCQMC": {
+      "C1": {
+        "Consistent": 93.1,
+        "Inconsistent": 71.6
+      },
+      "C2": {
+        "Consistent": 92.1,
+        "Inconsistent": 77.1
+      },
+      "C3": {
+        "Consistent": 93.2,
+        "Inconsistent": 80.8
+      },
+      "TDM": {
+        "Consistent": 92.8,
+        "Inconsistent": 79.4
+      }
+    },
+    "BQ": {
+      "C1": {
+        "Consistent": 89.5,
+        "Inconsistent": 67.5
+      },
+      "C2": {
+        "Consistent": 89.2,
+        "Inconsistent": 71.4
+      },
+      "C3": {
+        "Consistent": 89.0,
+        "Inconsistent": 71.9
+      },
+      "TDM": {
+        "Consistent": 89.5,
+        "Inconsistent": 71.5
+      }
+    }
+  },
+  {
+    "QQP": {
+      "C1": {
+        "Consistent": 95.1,
+        "Inconsistent": 78.6
+      },
+      "C2": {
+        "Consistent": 94.7,
+        "Inconsistent": 79.5
+      },
+      "C3": {
+        "Consistent": 94.7,
+        "Inconsistent": 79.4
+      },
+      "TDM": {
+        "Consistent": 94.9,
+        "Inconsistent": 79.7
+      }
+    },
+    "MRPC": {
+      "C1": {
+        "Consistent": 91.5,
+        "Inconsistent": 73.2
+      },
+      "C2": {
+        "Consistent": 91.2,
+        "Inconsistent": 75.1
+      },
+      "C3": {
+        "Consistent": 91.3,
+        "Inconsistent": 76.0
+      },
+      "TDM": {
+        "Consistent": 91.3,
+        "Inconsistent": 76.0
+      }
+    },
+    "LCQMC": {
+      "C1": {
+        "Consistent": 93.3,
+        "Inconsistent": 72.2
+      },
+      "C2": {
+        "Consistent": 92.2,
+        "Inconsistent": 78.0
+      },
+      "C3": {
+        "Consistent": 93.3,
+        "Inconsistent": 81.0
+      },
+      "TDM": {
+        "Consistent": 93.0,
+        "Inconsistent": 80.1
+      }
+    },
+    "BQ": {
+      "C1": {
+        "Consistent": 89.3,
+        "Inconsistent": 67.7
+      },
+      "C2": {
+        "Consistent": 89.2,
+        "Inconsistent": 72.1
+      },
+      "C3": {
+        "Consistent": 89.2,
+        "Inconsistent": 71.3
+      },
+      "TDM": {
+        "Consistent": 89.6,
+        "Inconsistent": 71.2
+      }
+    }
+  }
+]
