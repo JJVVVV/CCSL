@@ -16,7 +16,7 @@ from load_data_fns import DATASET_CLASSNUM_MAP, DatasetName, TextType
 class Evaluator1(Evaluator):
     confused_use_ot = False
     save_results = True
-    just_return_metric = False
+    just_return_metric = True
 
     def calculate_metric_callback(self, all_labels: list, all_logits: list, mean_loss: float):
         all_labels = np.array(all_labels)
@@ -175,4 +175,7 @@ class Evaluator1(Evaluator):
                 return (metric_dict, bad_cases, good_cases_idxs, controversial_cases, confused_cases, definite_cases, all_logits, all_labels)
         else:
             metric_dict = MetricDict({"accuracy": acc * 100, "F1-score": f1 * 100, "loss": mean_loss})
-            return metric_dict
+            if self.just_return_metric:
+                return metric_dict
+            else:
+                return metric_dict, all_logits, all_labels

@@ -126,6 +126,7 @@ def get_contro_confused_definite_cases(split="TEST"):
             config.batch_size_infer = 100
             Evaluator1.confused_use_ot = False
             Evaluator1.save_results = True
+            Evaluator1.just_return_metric = False
             evaluator = Evaluator1(
                 "classify", Split.ANY, config=config, model=model, tokenizer=tokenizer, dataset=dataset, extral_args_evaluation={"is_train": False}
             )
