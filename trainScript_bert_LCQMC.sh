@@ -1,9 +1,17 @@
 #!/bin/bash
 # A100: 192.168.126.81
 # nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &
+# nohup autocuda.sh -e 2 -bo /dev/null "nohup ./trainScript_bert_LCQMC.sh" > autocuda.log 2>&1 &
+# nohup waitstart.sh -p 735075 "nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
+# nohup waitstart.sh -n trainScript_macbert_LCQMC "nohup ./trainScript_bert_LCQMC.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
 
+if [ -z "$1" ]; then
+  CUDA_VISIBLE_DEVICES=2
+else
+  CUDA_VISIBLE_DEVICES=$1
+fi
 
-CUDA_VISIBLE_DEVICES=0/1
+# CUDA_VISIBLE_DEVICES=2
 # CUDA_VISIBLE_DEVICES=0/1/2/3/4
 # CUDA_VISIBLE_DEVICES=5/6/7
 
@@ -30,6 +38,8 @@ seeds=(25 26 28 29)
 # 30 31 32 33 34 35 36 39 40 41 43
 
 
+seeds=(29 109 38 14 44)
+
 # 遍历所有的种子
 for seed in ${seeds[@]}
 do
@@ -41,7 +51,7 @@ do
   part="all"
   text_type='ORI'
   # text_type='DATA_AUG_REP4'
-  # text_type='JUST_DATA_AUG_ORI'
+  text_type='JUST_DATA_AUG_ORI'
 
   min_threshold=None
   alpha=None

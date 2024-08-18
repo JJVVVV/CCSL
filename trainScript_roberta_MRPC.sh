@@ -3,6 +3,13 @@
 # nohup ./trainScript_roberta_MRPC.sh > /dev/null 2>&1 &
 
 
+if [ -z "$1" ]; then
+  CUDA_VISIBLE_DEVICES=7
+else
+  CUDA_VISIBLE_DEVICES=$1
+fi
+
+
 seeds=(59 13 43 71 56)
 seeds=(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25)
 seeds=(30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60)
@@ -14,8 +21,6 @@ seeds=(30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 5
 
 seeds=(9 37 59 2 44)
 
-CUDA_VISIBLE_DEVICES=1/0
-# CUDA_VISIBLE_DEVICES=5/6/7
 
 # ###################################parameters#########################################
 model_structure="encoder"
@@ -25,7 +30,7 @@ dataset_name="MRPC"
 part="all"
 text_type='ORI'
 # text_type='DATA_AUG_REP4'
-# text_type='JUST_DATA_AUG_ORI'
+text_type='JUST_DATA_AUG_ORI'
 
 min_threshold=None
 alpha=None

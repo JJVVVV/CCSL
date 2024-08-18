@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # nohup ./trainScript_roberta_QQP.sh > /dev/null 2>&1 &
+# nohup autocuda.sh -bo /dev/null "nohup ./trainScript_roberta_QQP.sh" > autocuda.log 2>&1 &
 
 if [ -z "$1" ]; then
   CUDA_VISIBLE_DEVICES=1/3/5
@@ -55,7 +56,7 @@ do
       text_type='ORI'
       # text_type='DATA_AUG_REP4'
       # text_type='JUST_DATA_AUG_REP4'
-      # text_type='JUST_DATA_AUG_ORI'
+      text_type='JUST_DATA_AUG_ORI'
 
       # text_type='DATA_AUG_REP4_FUSED'
       # text_type='JUST_DATA_AUG6'
