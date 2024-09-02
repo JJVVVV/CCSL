@@ -72,6 +72,8 @@ from utils.evaluate import Evaluator1
 def get_contro_confused_definite_cases(split="TEST"):
     seed_of_stage1 = configs.seed if not hasattr(configs, "seed_of_stage1") else configs.seed_of_stage1
     if "hardcases_from_baseline" in configs.model_name and split == "TRAINING":
+        if not (baseline_model_dir / str(seed_of_stage1)).exists():
+            seed_of_stage1 = 2
         step = WatchDog.load(baseline_model_dir / str(seed_of_stage1) / "optimal_checkpoint").best_checkpoint[1]
         results_dir = baseline_model_dir / str(seed_of_stage1) / "evaluator" / f"step={step}" / f"{split if split!='TRAINING' else 'ANY'}.json"
     else:
@@ -930,17 +932,20 @@ if __name__ == "__main__":
     elif configs.dataset_name == "MRPC":
         if "warmboost" in configs.model_name:
             if "single" in configs.model_name or "baseline" in configs.model_name or "s2m" in configs.model_name:
-                if "nodrop" in configs.model_name:
-                    if "TWR" in configs.model_name:
-                        stage1_model_dir = Path(
-                            f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/2e-05"
+                # if "nodrop" in configs.model_name:
+                #     if "TWR" in configs.model_name:
+                #         stage1_model_dir = Path(
+                #             f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TWR_nodrop_single_model/3/16/2e-05"
+                #         )
+                #     else:
+                #         stage1_model_dir = Path(
+                #             f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/2e-05"
+                #         )
+                # else:
+                #     stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model/3/16/2e-05")
+                stage1_model_dir = Path(
+                            f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/{configs.model_name_stage1}/3/16/2e-05"
                         )
-                    else:
-                        stage1_model_dir = Path(
-                            f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/TIWR_nodrop_single_model/3/16/2e-05"
-                        )
-                else:
-                    stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/single_model/3/16/2e-05")
             elif "multi" in configs.model_name:
                 if "shareclassifier" in configs.model_name:
                     stage1_model_dir = Path(f"outputs/{configs.dataset_name}/{configs.model_type}/DATA_AUG_REP4/all/multi_model_shareclassifier/3/16/2e-05")

@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# nohup ./trainScript_roberta_MRPC_only_TIWR-H.sh > /dev/null 2>&1 &
-# nohup autocuda.sh -bo /dev/null "nohup ./trainScript_roberta_MRPC_only_TIWR-H.sh" > autocuda.log 2>&1 &
+# nohup ./trainScript_roberta_MRPC_C3+TDM.sh > /dev/null 2>&1 &
+# nohup autocuda.sh -bo /dev/null "nohup ./trainScript_roberta_MRPC_C3+TDM.sh" > autocuda.log 2>&1 &
 
 
 if [ -z "$1" ]; then
-  CUDA_VISIBLE_DEVICES=3
+  CUDA_VISIBLE_DEVICES=6
 else
   CUDA_VISIBLE_DEVICES=$1
 fi
@@ -27,7 +27,9 @@ declare -A pid_cuda
 all_times=(0.4 0.2 0.6 0.8 1)
 # all_times=(0.4)
 # seeds_of_stage1=(59 13 43 71 56)
-seeds_of_stage1=(9 37 59 2 44)
+seeds_of_stage1=(9 37 59 2 44) # qwen
+seeds_of_stage1=(47 9 34 22 59) # llama3
+
 seeds=(13 16 24 0 14 59 43 71 40 37 1 2 3 4 5 6 7 8 9 10)
 # seeds=(1 2 3 4 5 6 7 8 9 10 12 15 17 18 19 20 21 22 23 25 26 27 28 29 30 31 32 33 34 35 36 37 39 40 41 44 45 46 47 48 49)
 
@@ -52,14 +54,14 @@ do
 
       model_type="roberta-base"
 
-
-      model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-      model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
-      model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}_record_pipline/seed_of_stage1=$seed_of_stage1"
-      
+      data_from="llama3"
+      model_name_stage1="TWR_nodrop_single_model_data_from=$data_from"
 
       # model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_mix_easycases_totaltimes=${times}/seed_of_stage1=$seed_of_stage1"
-
+      # model_name="TIWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      # model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}/seed_of_stage1=$seed_of_stage1"
+      model_name="TWR-H_nodrop_single_model_hardcases_from_baseline_warmboost_fix_num_ratio=${times}_record_pipline_data_from=$data_from/seed_of_stage1=$seed_of_stage1"
+      
 
       model_dir="../pretrained/$model_type"
       # model_dir="../../pretrained_models/$model_type"
@@ -77,17 +79,17 @@ do
       metric='accuracy'
 
       if [[ $model_name == *"nodrop"* ]]; then
-        train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_nodrop.jsonl"
-        val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean_nodrop.jsonl"
-        test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean_nodrop.jsonl"
+        train_file_path="data/$dataset_name/train/${data_from}_with_rephrase_clean_nodrop.jsonl"
+        val_file_path="data/$dataset_name/val/${data_from}_with_rephrase_clean_nodrop.jsonl"
+        test_file_path="data/$dataset_name/test/${data_from}_with_rephrase_clean_nodrop.jsonl"
       else
         if [[ $model_name == *"correct"* ]]; then
-          train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_correct.jsonl"
+          train_file_path="data/$dataset_name/train/${data_from}_with_rephrase_clean_correct.jsonl"
         else
-          train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean.jsonl"
+          train_file_path="data/$dataset_name/train/${data_from}_with_rephrase_clean.jsonl"
         fi
-        val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean.jsonl"
-        test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean.jsonl"
+        val_file_path="data/$dataset_name/val/${data_from}_with_rephrase_clean.jsonl"
+        test_file_path="data/$dataset_name/test/${data_from}_with_rephrase_clean.jsonl"
       fi
       warmup_ratio=0.1
       # ###################################parameters#########################################
@@ -165,6 +167,7 @@ do
             --show_step False \
             --cache_dataset True \
             --seed_of_stage1 $seed_of_stage1 \
+            --model_name_stage1 $model_name_stage1 \
             --times $times \
             --record_cheat False \
             --model_structure $model_structure \
@@ -203,6 +206,7 @@ do
           --show_step False \
           --cache_dataset True \
           --seed_of_stage1 $seed_of_stage1 \
+          --model_name_stage1 $model_name_stage1 \
           --times $times \
           --auxloss_warmup_steps $auxloss_warmup_steps \
           --record_cheat False \

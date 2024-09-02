@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# nohup ./trainScript_roberta_MRPC.sh > /dev/null 2>&1 &
+# nohup ./trainScript_roberta_MRPC_C1+C2.sh > /dev/null 2>&1 &
+# nohup autocuda.sh -e 2 -bo /dev/null "nohup ./trainScript_roberta_MRPC_C1+C2.sh" > autocuda.log 2>&1 &
+# nohup waitstart.sh -p 735075 "nohup ./trainScript_roberta_MRPC_C1+C2.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
+# nohup waitstart.sh -n trainScript_macbert_LCQMC "nohup ./trainScript_roberta_MRPC_C1+C2.sh > /dev/null 2>&1 &" > waitstart.log 2>&1 &
 
 
 if [ -z "$1" ]; then
-  CUDA_VISIBLE_DEVICES=7
+  CUDA_VISIBLE_DEVICES=6
 else
   CUDA_VISIBLE_DEVICES=$1
 fi
@@ -20,6 +23,7 @@ seeds=(30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 5
 
 
 seeds=(9 37 59 2 44)
+seeds=(9 37 59 2 44 17 22 33 34 47)
 
 
 # ###################################parameters#########################################
@@ -28,9 +32,10 @@ task_type="classify"
 dashboard="None"
 dataset_name="MRPC"
 part="all"
-text_type='ORI'
-# text_type='DATA_AUG_REP4'
-text_type='JUST_DATA_AUG_ORI'
+# text_type='ORI'
+text_type='DATA_AUG_REP4'
+# text_type='JUST_DATA_AUG_ORI'
+data_from="llama3"
 
 min_threshold=None
 alpha=None
@@ -39,9 +44,8 @@ model_type="roberta-base"
 model_dir="../../pretrained/$model_type"
 # model_dir="../../pretrained_models/$model_type"
 
-model_name="Baseline_nodrop_baseline"
-# model_name="TIWR_nodrop_single_model"
-# model_name="TWR_nodrop_single_model"
+# model_name="Baseline_nodrop_baseline"
+model_name="TWR_nodrop_single_model_data_from=$data_from"
 
 
 fp16=True
@@ -62,17 +66,17 @@ weight_decay=0.1
 metric='accuracy'
 
 if [[ $model_name == *"nodrop"* ]]; then
-  train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_nodrop.jsonl"
-  val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean_nodrop.jsonl"
-  test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean_nodrop.jsonl"
+  train_file_path="data/$dataset_name/train/${data_from}_with_rephrase_clean_nodrop.jsonl"
+  val_file_path="data/$dataset_name/val/${data_from}_with_rephrase_clean_nodrop.jsonl"
+  test_file_path="data/$dataset_name/test/${data_from}_with_rephrase_clean_nodrop.jsonl"
 else
   if [[ $model_name == *"correct"* ]]; then
-    train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean_correct.jsonl"
+    train_file_path="data/$dataset_name/train/${data_from}_with_rephrase_clean_correct.jsonl"
   else
-    train_file_path="data/$dataset_name/train/qwen_with_rephrase_clean.jsonl"
+    train_file_path="data/$dataset_name/train/${data_from}_with_rephrase_clean.jsonl"
   fi
-  val_file_path="data/$dataset_name/val/qwen_with_rephrase_clean.jsonl"
-  test_file_path="data/$dataset_name/test/qwen_with_rephrase_clean.jsonl"
+  val_file_path="data/$dataset_name/val/${data_from}_with_rephrase_clean.jsonl"
+  test_file_path="data/$dataset_name/test/${data_from}_with_rephrase_clean.jsonl"
 fi
 
 warmup_ratio=0.1
