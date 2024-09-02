@@ -1,4 +1,4 @@
-# cd generation && nohup python ./infer_baichuan.py > log5.log 2>&1 &
+# cd generation && nohup python infer_baichuan.py > log_BQ_val.log 2>&1 &
 
 import sys
 from tqdm import tqdm
@@ -6,8 +6,9 @@ from tqdm import tqdm
 sys.path.append("..")
 
 dataset = "LCQMC"
+dataset = "BQ"
 split = "train"
-split = "test"
+# split = "test"
 split = "val"
 
 from integration.chater_pkg.chater import Baichuan
